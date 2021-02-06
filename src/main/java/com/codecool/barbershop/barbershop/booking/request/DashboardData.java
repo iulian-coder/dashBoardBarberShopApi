@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -16,6 +17,7 @@ public class DashboardData {
     private int totalUpcomingBookings;
     private int totalConfirmedBookings;
     private int totalCanceledBookings;
+    private Date reportDate;
     private List<Booking> latestBookings;
 
 }

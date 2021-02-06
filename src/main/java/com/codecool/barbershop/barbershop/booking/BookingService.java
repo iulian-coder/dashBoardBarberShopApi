@@ -61,12 +61,15 @@ public class BookingService {
         return bookingRepository.findAllByClient_ClientId(clientId,sort);
     }
 
+
+//    Dashboard data
     public DashboardData getDataForDashBoard() {
         DashboardData data = new DashboardData();
 
         Date firstDayOfTheMonth = java.sql.Date.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
         Date lastDayOfTheMonth = java.sql.Date.valueOf(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()));
 
+        data.setReportDate(java.sql.Date.valueOf(LocalDate.now()));
         data.setTotalClients(clientService.getTotalClients());
         data.setTotalConfirmedBookings(bookingRepository.countBookingModelByBookingDateBetweenAndBookingStatus(firstDayOfTheMonth, lastDayOfTheMonth, BookingStatus.CONFIRM));
         data.setTotalUpcomingBookings(bookingRepository.countBookingModelByBookingDateBetweenAndBookingStatus(firstDayOfTheMonth, lastDayOfTheMonth, BookingStatus.UPCOMING));

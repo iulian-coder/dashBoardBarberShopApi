@@ -46,7 +46,7 @@ public class BookingController {
 //        Add booking
         Booking newBooking = bookingService.saveNewBooking(bookingReqAddNewBooking);
 //        Send Sms notification
-        smsService.sendSmsNewBooking(newBooking);
+//        smsService.sendSmsNewBooking(newBooking);
         return newBooking;
 
     }
