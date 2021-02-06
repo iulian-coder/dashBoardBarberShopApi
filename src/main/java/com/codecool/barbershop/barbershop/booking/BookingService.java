@@ -2,7 +2,7 @@ package com.codecool.barbershop.barbershop.booking;
 
 import com.codecool.barbershop.barbershop.booking.request.BookingReqAddNewBooking;
 import com.codecool.barbershop.barbershop.booking.request.BookingReqChangeStatus;
-import com.codecool.barbershop.barbershop.booking.request.DashboardData;
+import com.codecool.barbershop.barbershop.dashboard.DashboardData;
 import com.codecool.barbershop.barbershop.client.Client;
 import com.codecool.barbershop.barbershop.client.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,19 +61,12 @@ public class BookingService {
         return bookingRepository.findAllByClient_ClientId(clientId,sort);
     }
 
-    public DashboardData getDataForDashBoard() {
-        DashboardData data = new DashboardData();
 
-        Date firstDayOfTheMonth = java.sql.Date.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
-        Date lastDayOfTheMonth = java.sql.Date.valueOf(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()));
-
-        data.setTotalClients(clientService.getTotalClients());
-        data.setTotalConfirmedBookings(bookingRepository.countBookingModelByBookingDateBetweenAndBookingStatus(firstDayOfTheMonth, lastDayOfTheMonth, BookingStatus.CONFIRM));
-        data.setTotalUpcomingBookings(bookingRepository.countBookingModelByBookingDateBetweenAndBookingStatus(firstDayOfTheMonth, lastDayOfTheMonth, BookingStatus.UPCOMING));
-        data.setTotalCanceledBookings(bookingRepository.countBookingModelByBookingDateBetweenAndBookingStatus(firstDayOfTheMonth, lastDayOfTheMonth, BookingStatus.CANCEL));
-        data.setLatestBookings(bookingRepository.findTop9ByBookingStatusOrderByBookingDateAsc(BookingStatus.UPCOMING));
-
-        return data;
+    public int countBookingsByBookingDateBetweenAndBookingStatus(Date firstDayOfTheMonth, Date lastDayOfTheMonth, BookingStatus confirm) {
+        return bookingRepository.countBookingsByBookingDateBetweenAndBookingStatus(firstDayOfTheMonth, lastDayOfTheMonth, confirm);
     }
 
+    public List<Booking> findTop9ByBookingStatusOrderByBookingDateAsc(BookingStatus upcoming) {
+        return bookingRepository.findTop9ByBookingStatusOrderByBookingDateAsc(upcoming);
+    }
 }
