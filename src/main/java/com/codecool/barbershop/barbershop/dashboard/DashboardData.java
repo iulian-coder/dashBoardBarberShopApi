@@ -1,4 +1,4 @@
-package com.codecool.barbershop.barbershop.booking.request;
+package com.codecool.barbershop.barbershop.dashboard;
 
 import com.codecool.barbershop.barbershop.booking.Booking;
 import lombok.AllArgsConstructor;

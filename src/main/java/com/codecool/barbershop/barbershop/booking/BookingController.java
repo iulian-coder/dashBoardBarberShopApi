@@ -2,7 +2,7 @@ package com.codecool.barbershop.barbershop.booking;
 
 import com.codecool.barbershop.barbershop.booking.request.BookingReqAddNewBooking;
 import com.codecool.barbershop.barbershop.booking.request.BookingReqChangeStatus;
-import com.codecool.barbershop.barbershop.booking.request.DashboardData;
+import com.codecool.barbershop.barbershop.dashboard.DashboardData;
 import com.codecool.barbershop.barbershop.sms.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
@@ -58,9 +57,5 @@ public class BookingController {
     }
 
     //    Dashboard
-    @GetMapping("dashboard")
-    public DashboardData getDashboardData() {
-        return bookingService.getDataForDashBoard();
-    }
 
 }

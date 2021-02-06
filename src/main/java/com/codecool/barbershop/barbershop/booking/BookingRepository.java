@@ -17,7 +17,13 @@ interface BookingRepository extends JpaRepository<Booking,Integer> {
 
     Page<Booking> findAll(Pageable pageable);
     List<Booking> findAllByClient_ClientId(Long i, Sort sort);
-    int countBookingModelByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus status);
+
+
+
+    int countBookingsByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus status);
+
+
+
     List<Booking> findTop9ByBookingStatusOrderByBookingDateAsc(BookingStatus status);
 
 }
