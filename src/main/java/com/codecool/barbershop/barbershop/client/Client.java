@@ -2,9 +2,11 @@ package com.codecool.barbershop.barbershop.client;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,25 +14,33 @@ import javax.persistence.*;
 @Getter
 @Entity
 @ToString
-@Table(name="clients")
+@Table(name = "clients")
 public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long clientId;
 
-    @NotNull private String firstName;
+    @NotNull
+    private String firstName;
 
-    @NotNull private String lastName;
+    @NotNull
+    private String lastName;
 
-    @NotNull @Email
-    @Column(unique = true) private String email;
+    @NotNull
+    @Email
+    @Column(unique = true)
+    private String email;
 
-    @NotNull private String phoneNo;
+    @NotNull
+    private String phoneNo;
 
-//    TODO create date & update date
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
+    private Date createdDate;
 
-
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedDate;
 
 
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class DashboardData {
 
-    private int totalClients;
+    private int newClients;
     private int totalUpcomingBookings;
     private int totalConfirmedBookings;
     private int totalCanceledBookings;
