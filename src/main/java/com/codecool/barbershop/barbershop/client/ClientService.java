@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,15 +43,13 @@ public class ClientService {
             clientSearchAutocompleteReq.setId(client.getClientId());
             clientSearchAutocompleteReq.setFirstName(client.getFirstName());
             clientSearchAutocompleteReq.setPhoneNo(client.getPhoneNo());
-            clientSearchAutocompleteReq.setFirstNameAndPhone("Name: "+client.getFirstName()+" | Phone: "+client.getPhoneNo());
+            clientSearchAutocompleteReq.setFirstNameAndPhone("Name: " + client.getFirstName() + " | Phone: " + client.getPhoneNo());
 
             clientList.add(clientSearchAutocompleteReq);
         }
         return clientList;
     }
-    public int getTotalClients() {
-        return clientRepository.findAll().size();
-    }
+
 
     public Client updateClient(Client client) {
         return clientRepository.save(client);
@@ -62,7 +61,13 @@ public class ClientService {
     }
 
     public Client addClient(Client client) {
-        System.out.println(client);
+        Date today = new Date();
+        client.setCreatedDate(today);
+        client.setUpdatedDate(today);
         return clientRepository.save(client);
+    }
+
+    public int countNewClientsDateBetween(Date start, Date end) {
+        return clientRepository.countClientsByCreatedDateBetween(start, end);
     }
 }
