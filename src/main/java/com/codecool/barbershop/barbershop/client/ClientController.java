@@ -2,6 +2,7 @@ package com.codecool.barbershop.barbershop.client;
 
 import com.codecool.barbershop.barbershop.client.request.ClientSearchAutocompleteReq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,8 @@ public class ClientController {
 
     @GetMapping
     public List<Client> getAllClients() {
-        return clientService.getAllClients();
+        Sort sort = Sort.by("firstName");
+        return clientService.getAllClients(sort);
     }
 
 

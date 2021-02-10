@@ -11,8 +11,9 @@ public class ClientSearchAutocompleteReq {
 
     private Long id;
     private String firstName;
+    private String lastName;
     private String phoneNo;
-    private String firstNameAndPhone;
+    private String nameAndPhone;
 
 
 }

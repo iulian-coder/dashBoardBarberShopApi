@@ -7,7 +7,6 @@ import java.util.Date;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    Client getByClientId(long clientId);
 
     int countClientsByCreatedDateBetween(Date start, Date end);
 

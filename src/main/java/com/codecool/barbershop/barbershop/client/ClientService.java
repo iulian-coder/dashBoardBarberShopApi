@@ -22,8 +22,24 @@ public class ClientService {
     }
 
 
-    public List<Client> getAllClients() {
-        return clientRepository.findAll(Sort.by("firstName"));
+    public List<Client> getAllClients(Sort sort) {
+        return clientRepository.findAll(sort);
+    }
+
+    public Client addClient(Client client) {
+        Date today = new Date();
+        client.setCreatedDate(today);
+        client.setUpdatedDate(today);
+        return clientRepository.save(client);
+    }
+
+    public Client updateClient(Client client) {
+        return clientRepository.save(client);
+    }
+
+    public void deleteClient(Client client) {
+
+        clientRepository.delete(client);
     }
 
 
@@ -35,37 +51,21 @@ public class ClientService {
 
 
     public List<ClientSearchAutocompleteReq> searchClientWithAutocomplete() {
-        List<ClientSearchAutocompleteReq> clientList = new ArrayList<>();
-        List<Client> allClients = getAllClients();
+        List<ClientSearchAutocompleteReq> clientSearchAutocompleteReqList = new ArrayList<>();
+        List<Client> allClients = clientRepository.findAll();
 
         for (Client client : allClients) {
-            ClientSearchAutocompleteReq clientSearchAutocompleteReq = new ClientSearchAutocompleteReq();
-            clientSearchAutocompleteReq.setId(client.getClientId());
-            clientSearchAutocompleteReq.setFirstName(client.getFirstName());
-            clientSearchAutocompleteReq.setPhoneNo(client.getPhoneNo());
-            clientSearchAutocompleteReq.setFirstNameAndPhone("Name: " + client.getFirstName() + " | Phone: " + client.getPhoneNo());
-
-            clientList.add(clientSearchAutocompleteReq);
+            ClientSearchAutocompleteReq autocompleteReq = new ClientSearchAutocompleteReq();
+            autocompleteReq.setId(client.getClientId());
+            autocompleteReq.setFirstName(client.getFirstName());
+            autocompleteReq.setLastName(client.getLastName());
+            autocompleteReq.setPhoneNo(client.getPhoneNo());
+            autocompleteReq.setNameAndPhone(client.getFirstName() + " " + client.getLastName() + " | Phone: " + client.getPhoneNo());
+            clientSearchAutocompleteReqList.add(autocompleteReq);
         }
-        return clientList;
+        return clientSearchAutocompleteReqList;
     }
 
-
-    public Client updateClient(Client client) {
-        return clientRepository.save(client);
-    }
-
-    public void deleteClient(Client client) {
-
-        clientRepository.delete(client);
-    }
-
-    public Client addClient(Client client) {
-        Date today = new Date();
-        client.setCreatedDate(today);
-        client.setUpdatedDate(today);
-        return clientRepository.save(client);
-    }
 
     public int countNewClientsDateBetween(Date start, Date end) {
         return clientRepository.countClientsByCreatedDateBetween(start, end);
