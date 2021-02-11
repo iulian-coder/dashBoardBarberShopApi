@@ -2,6 +2,7 @@ package com.codecool.barbershop.barbershop.client;
 
 import com.codecool.barbershop.barbershop.client.request.ClientSearchAutocompleteReq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,8 @@ public class ClientService {
     }
 
 
-    public List<Client> getAllClients(Sort sort) {
-        return clientRepository.findAll(sort);
+    public List<Client> getAllClients(Pageable pageRequest) {
+        return clientRepository.findAll(pageRequest).getContent();
     }
 
     public Client addClient(Client client) {
