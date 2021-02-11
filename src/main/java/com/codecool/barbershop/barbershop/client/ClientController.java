@@ -24,6 +24,7 @@ public class ClientController {
     @GetMapping
     public List<Client> getAllClients(@RequestParam(defaultValue = "0") int page,
                                       @RequestParam(defaultValue = "10") int size) {
+//        TODO Sort option input from User
         Sort sort = Sort.by("createdDate").descending();
         Pageable pageRequest = PageRequest.of(page, size, sort);
         return clientService.getAllClients(pageRequest);

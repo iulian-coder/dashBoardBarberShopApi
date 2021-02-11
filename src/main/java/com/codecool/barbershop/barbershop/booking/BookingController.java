@@ -29,6 +29,7 @@ public class BookingController {
     @GetMapping
     List<Booking> getAllBooking(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "10") int size) {
+//        TODO Sort option input from User
         Sort sort = Sort.by("createdDate").descending();
         Pageable pageRequest = PageRequest.of(page, size, sort);
         return bookingService.getAllBookings(pageRequest);
@@ -36,6 +37,7 @@ public class BookingController {
 
     @GetMapping("history/{clientId}")
     List<Booking> getAllBookingsByClientId(@PathVariable Long clientId) {
+//        TODO Sort option input from User
         Sort sort = Sort.by("createdDate").descending();
         return bookingService.getAllBookingsByClientId(clientId, sort);
     }
@@ -45,7 +47,7 @@ public class BookingController {
 //        Add booking
         Booking newBooking = bookingService.saveNewBooking(bookingReqAddNewBooking);
 //        Send Sms notification
-//        smsService.sendSmsNewBooking(newBooking);
+        if (bookingReqAddNewBooking.isSendSms()) smsService.sendSmsNewBooking(newBooking);
         return newBooking;
 
     }

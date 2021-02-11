@@ -41,9 +41,9 @@ public class SmsService implements TwilioService {
     public void sendSmsNewBooking(Booking newBooking) {
         String from = "+18059549771";
         String clientName = newBooking.getClient().getFirstName();
-        String phoneNo = newBooking.getClient().getPhoneNo();
+        String phoneNo = "+"+ newBooking.getClient().getPhoneNo();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy hh:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         String bookingDate = dateFormat.format(newBooking.getBookingDate());
 
         String message = "Buna " + clientName + " ,rezervarea ta este inregistrata, te asteptam la data " + bookingDate;

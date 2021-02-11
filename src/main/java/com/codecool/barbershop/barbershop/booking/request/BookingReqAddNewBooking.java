@@ -15,5 +15,6 @@ public class BookingReqAddNewBooking {
     private int clientId;
     private Date bookingDate;
     private String bookingNotes;
+    private boolean sendSms;
 
 }

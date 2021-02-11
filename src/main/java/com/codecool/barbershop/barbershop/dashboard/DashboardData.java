@@ -18,7 +18,7 @@ public class DashboardData {
     private int totalConfirmedBookings;
     private int totalCanceledBookings;
     private Date reportDate;
-    private List<Booking> latestBookings;
+    private List<Booking> bookingList;
 
 }
 
