@@ -4,10 +4,9 @@ import com.codecool.barbershop.barbershop.booking.BookingService;
 import com.codecool.barbershop.barbershop.booking.BookingStatus;
 import com.codecool.barbershop.barbershop.client.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 
 @Service
@@ -22,18 +21,15 @@ public class DashboardService {
     }
 
 
-    public DashboardData getDataForDashBoard() {
+    public DashboardData getDataForDashBoard(Date reportDate, Date start, Date end, Sort sort) {
         DashboardData data = new DashboardData();
 
-        Date firstDayOfTheMonth = java.sql.Date.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
-        Date lastDayOfTheMonth = java.sql.Date.valueOf(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()));
-
-        data.setReportDate(java.sql.Date.valueOf(LocalDate.now()));
-        data.setNewClients(clientService.countNewClientsDateBetween(firstDayOfTheMonth,lastDayOfTheMonth));
-        data.setTotalConfirmedBookings(bookingService.countBookingsByBookingDateBetweenAndBookingStatus(firstDayOfTheMonth, lastDayOfTheMonth, BookingStatus.CONFIRM));
-        data.setTotalUpcomingBookings(bookingService.countBookingsByBookingDateBetweenAndBookingStatus(firstDayOfTheMonth, lastDayOfTheMonth, BookingStatus.UPCOMING));
-        data.setTotalCanceledBookings(bookingService.countBookingsByBookingDateBetweenAndBookingStatus(firstDayOfTheMonth, lastDayOfTheMonth, BookingStatus.CANCEL));
-        data.setLatestBookings(bookingService.findTop9ByBookingStatusOrderByBookingDateAsc(BookingStatus.UPCOMING));
+        data.setReportDate(reportDate);
+        data.setNewClients(clientService.countNewClientsDateBetween(start,end));
+        data.setTotalConfirmedBookings(bookingService.countBookingsByBookingDateBetweenAndBookingStatus(start, end, BookingStatus.CONFIRM));
+        data.setTotalUpcomingBookings(bookingService.countBookingsByBookingDateBetweenAndBookingStatus(start, end, BookingStatus.UPCOMING));
+        data.setTotalCanceledBookings(bookingService.countBookingsByBookingDateBetweenAndBookingStatus(start, end, BookingStatus.CANCEL));
+        data.setBookingList(bookingService.findAllByBookingDateBetweenAndBookingStatus(start, end, BookingStatus.UPCOMING, sort));
 
         return data;
     }
