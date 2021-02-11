@@ -56,6 +56,4 @@ public class BookingController {
 
     }
 
-    //    Dashboard
-
 }
