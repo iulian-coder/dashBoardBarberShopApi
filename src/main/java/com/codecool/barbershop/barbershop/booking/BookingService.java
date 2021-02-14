@@ -4,6 +4,7 @@ import com.codecool.barbershop.barbershop.booking.request.BookingReqAddNewBookin
 import com.codecool.barbershop.barbershop.booking.request.BookingReqChangeStatus;
 import com.codecool.barbershop.barbershop.client.Client;
 import com.codecool.barbershop.barbershop.client.ClientService;
+import com.codecool.barbershop.barbershop.client.request.ClientProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class BookingService {
     }
 
     public List<Booking> getAllBookingsByClientId(Long clientId, Sort sort) {
-        return bookingRepository.findAllByClient_ClientId(clientId,sort);
+        return bookingRepository.findAllByClient_ClientId(clientId, sort);
     }
 
     public int countBookingsByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus bookingStatus) {
@@ -64,5 +65,24 @@ public class BookingService {
 
     public List<Booking> findAllByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus bookingStatus, Sort sort) {
         return bookingRepository.findAllByBookingDateBetweenAndBookingStatus(start, end, bookingStatus, sort);
+
     }
+
+    public ClientProfile getClientDataAndBookings(long clientId) throws Exception {
+        ClientProfile clientProfile = new ClientProfile();
+        Client client = clientService.getClientById(clientId);
+
+        clientProfile.setClientId(client.getClientId());
+        clientProfile.setFirstName(client.getFirstName());
+        clientProfile.setLastName(client.getLastName());
+        clientProfile.setPhoneNo(client.getPhoneNo());
+        clientProfile.setEmail(client.getEmail());
+
+        List<Booking> clientBookings = bookingRepository.findAllByClient_ClientId(clientId, null);
+        clientProfile.setBookingList(clientBookings);
+
+        return clientProfile;
+    }
+
+
 }

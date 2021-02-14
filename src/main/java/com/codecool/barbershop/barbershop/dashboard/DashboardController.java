@@ -27,7 +27,7 @@ public class DashboardController {
 
         Date reportDate = new Date();
 //        TODO Sort option input from User If needed
-        Sort sort = Sort.by("bookingDate").descending();
+        Sort sort = Sort.by("bookingDate").ascending();
         Date firstDayOfTheMonth = java.sql.Date.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
         Date lastDayOfTheMonth = java.sql.Date.valueOf(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()));
 
