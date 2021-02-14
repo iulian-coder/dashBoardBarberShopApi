@@ -1,7 +1,8 @@
 package com.codecool.barbershop.barbershop.client;
 
+import com.codecool.barbershop.barbershop.booking.BookingService;
+import com.codecool.barbershop.barbershop.client.request.ClientProfile;
 import com.codecool.barbershop.barbershop.client.request.ClientSearchAutocompleteReq;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,10 +16,12 @@ import java.util.List;
 public class ClientController {
 
     private final ClientService clientService;
+    private final BookingService bookingService;
 
-    @Autowired
-    public ClientController(ClientService clientService) {
+
+    public ClientController(ClientService clientService, BookingService bookingService) {
         this.clientService = clientService;
+        this.bookingService = bookingService;
     }
 
     @GetMapping
@@ -32,8 +35,8 @@ public class ClientController {
 
 
     @GetMapping("{clientId}")
-    public Client clientProfile(@PathVariable("clientId") long clientId) throws Exception {
-        return clientService.getClientById(clientId);
+    public ClientProfile clientProfile(@PathVariable("clientId") long clientId) throws Exception {
+        return bookingService.getClientDataAndBookings(clientId);
     }
 
 //    TODO make DTO
