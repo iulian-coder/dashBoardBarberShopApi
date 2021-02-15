@@ -68,7 +68,7 @@ public class BookingService {
 
     }
 
-    public ClientProfile getClientDataAndBookings(long clientId) throws Exception {
+    public ClientProfile getClientDataAndBookings(long clientId)  {
         ClientProfile clientProfile = new ClientProfile();
         Client client = clientService.getClientById(clientId);
 

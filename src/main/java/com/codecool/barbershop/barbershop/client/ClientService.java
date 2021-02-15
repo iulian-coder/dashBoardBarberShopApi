@@ -1,6 +1,7 @@
 package com.codecool.barbershop.barbershop.client;
 
 import com.codecool.barbershop.barbershop.client.request.ClientSearchAutocompleteReq;
+import com.codecool.barbershop.barbershop.exception.ApiRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -42,10 +43,10 @@ public class ClientService {
     }
 
 
-    public Client getClientById(long clientId) throws Exception {
+    public Client getClientById(long clientId)  {
         Optional<Client> clientModel = clientRepository.findById(clientId);
 
-        return clientModel.orElseThrow(() -> new Exception("Client not found id:" + clientId));
+        return clientModel.orElseThrow(() -> new ApiRequestException("Client not found id:" + clientId));
     }
 
 
