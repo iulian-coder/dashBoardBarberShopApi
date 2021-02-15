@@ -35,7 +35,7 @@ public class ClientController {
 
 
     @GetMapping("{clientId}")
-    public ClientProfile clientProfile(@PathVariable("clientId") long clientId) throws Exception {
+    public ClientProfile clientProfile(@PathVariable("clientId") long clientId){
         return bookingService.getClientDataAndBookings(clientId);
     }
 
