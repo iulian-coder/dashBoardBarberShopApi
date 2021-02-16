@@ -3,7 +3,10 @@ package com.codecool.barbershop.barbershop.client;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+import com.codecool.barbershop.barbershop.user.User;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -42,5 +45,9 @@ public class Client {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
 
+    @OneToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

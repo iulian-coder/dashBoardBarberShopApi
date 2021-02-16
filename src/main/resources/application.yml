@@ -2,9 +2,44 @@ spring:
   datasource:
     url: ${DATABASE_URL_FULL}
     username: ${DATABASE_USER}
-    password: ${DATABASE_PASSWORD}
+    password: ${DATABASE_PASWWORD}
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     show-sql: false
     hibernate:
-      ddl-auto: update
-    database-platform: "org.hibernate.dialect.PostgreSQLDialect"
+      ddl-auto: create
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_ID}
+            clientSecret: ${GOOGLE_SECRET}
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+          facebook:
+            clientId: ${FACEBOOK_ID}
+            clientSecret: ${FACEBOOK_SECRET}
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - public_profile
+
+
+
+app:
+  tokenSecret: ${TOKEN_SECRET}
+  tokenExpire: 36000000
+  oauth2:
+    # After successfully authenticating with the OAuth2 Provider,
+    # we'll be generating an auth token for the user and sending the token to the
+    # redirectUri mentioned by the client in the /oauth2/authorize request.
+    # We're not using cookies because they won't work well in mobile clients.
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
