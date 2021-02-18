@@ -6,7 +6,6 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +18,10 @@ public class JwtTokenService {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
 
-    @Value("${app.tokenSecret}")
-    private String tokenSecret ;
 
-    @Value("${app.tokenExpire")
-    private long validityInMilliseconds;
+    private String tokenSecret = System.getProperty("TOKEN_SECRET");
+
+    private long tokenExpire = 36000000;
 
     private SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(tokenSecret.getBytes(StandardCharsets.UTF_8));
@@ -34,7 +32,7 @@ public class JwtTokenService {
         String userId = Long.toString(userPrincipal.getId());
 
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + validityInMilliseconds);
+        Date expiryDate = new Date(now.getTime() + tokenExpire);
         String compact = Jwts.builder()
                 .setSubject(userId)
                 .setIssuedAt(now)
