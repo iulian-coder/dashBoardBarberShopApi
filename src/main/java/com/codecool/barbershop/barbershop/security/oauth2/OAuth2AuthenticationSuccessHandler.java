@@ -1,6 +1,6 @@
 package com.codecool.barbershop.barbershop.security.oauth2;
 
-import com.codecool.barbershop.barbershop.configuration.AppProperties;
+//import com.codecool.barbershop.barbershop.configuration.AppProperties;
 import com.codecool.barbershop.barbershop.exception.BadRequestException;
 import com.codecool.barbershop.barbershop.security.JwtTokenService;
 import com.codecool.barbershop.barbershop.util.CookieUtils;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Optional;
+import java.util.*;
 
 import static com.codecool.barbershop.barbershop.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
@@ -25,16 +25,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private JwtTokenService jwtTokenServices;
 
-    private AppProperties appProperties;
+//    private AppProperties appProperties;
 
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
 
     @Autowired
-    OAuth2AuthenticationSuccessHandler(JwtTokenService jwtTokenServices, AppProperties appProperties,
+    OAuth2AuthenticationSuccessHandler(JwtTokenService jwtTokenServices,
                                        HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
         this.jwtTokenServices = jwtTokenServices;
-        this.appProperties = appProperties;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
     }
 
@@ -74,9 +73,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private boolean isAuthorizedRedirectUri(String uri) {
+//        TODO Refactor to env the redirect uri
         URI clientRedirectUri = URI.create(uri);
+        List<String> authorizedRedirectUris = new ArrayList<>(List.of("http://localhost:3000/oauth2/redirect"));
 
-        return appProperties.getOauth2().getAuthorizedRedirectUris()
+        return authorizedRedirectUris
                 .stream()
                 .anyMatch(authorizedRedirectUri -> {
                     // Only validate host and port. Let the clients use different paths if they want to

@@ -30,12 +30,10 @@ public class Client {
     @NotNull
     private String lastName;
 
-    @NotNull
-    @Email
-    @Column(unique = true)
     private String email;
 
     @NotNull
+    @Column(unique = true)
     private String phoneNo;
 
     @Temporal(TemporalType.TIMESTAMP)
