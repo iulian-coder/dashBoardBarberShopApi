@@ -1,4 +1,4 @@
-package com.codecool.barbershop.barbershop.util;
+package com.codecool.barbershop.barbershop.security.oauth2;
 
 import org.springframework.util.SerializationUtils;
 

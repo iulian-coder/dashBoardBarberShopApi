@@ -1,8 +1,9 @@
 package com.codecool.barbershop.barbershop.client;
 
 import com.codecool.barbershop.barbershop.booking.BookingService;
-import com.codecool.barbershop.barbershop.client.request.ClientProfile;
-import com.codecool.barbershop.barbershop.client.request.ClientSearchAutocompleteReq;
+import com.codecool.barbershop.barbershop.client.payload.ClientProfileRequest;
+import com.codecool.barbershop.barbershop.client.payload.ClientSearchAutocompleteRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -11,17 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/clients")
+@RequestMapping(path = "api/v1/clients")
+@AllArgsConstructor
 public class ClientController {
 
     private final ClientService clientService;
     private final BookingService bookingService;
 
-
-    public ClientController(ClientService clientService, BookingService bookingService) {
-        this.clientService = clientService;
-        this.bookingService = bookingService;
-    }
 
     @GetMapping
     public List<Client> getAllClients(@RequestParam(defaultValue = "0") int page,
@@ -34,7 +31,7 @@ public class ClientController {
 
 
     @GetMapping("{clientId}")
-    public ClientProfile clientProfile(@PathVariable("clientId") long clientId){
+    public ClientProfileRequest clientProfile(@PathVariable("clientId") long clientId){
         return bookingService.getClientDataAndBookings(clientId);
     }
 
@@ -55,7 +52,7 @@ public class ClientController {
  }
 
     @GetMapping("search-client")
-    public List<ClientSearchAutocompleteReq> searchClientWithAutocomplete() {
+    public List<ClientSearchAutocompleteRequest> searchClientWithAutocomplete() {
         return clientService.searchClientWithAutocomplete();
     }
 

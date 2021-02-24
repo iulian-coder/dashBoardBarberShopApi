@@ -1,11 +1,12 @@
-package com.codecool.barbershop.barbershop.security;
+package com.codecool.barbershop.barbershop.user;
 
 
 import com.codecool.barbershop.barbershop.exception.ResourceNotFoundException;
 import com.codecool.barbershop.barbershop.user.User;
-import com.codecool.barbershop.barbershop.repository.UserRepository;
+import com.codecool.barbershop.barbershop.user.UserRepository;
 
 import com.codecool.barbershop.barbershop.user.UserPrincipal;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,14 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-
     private final UserRepository userRepository;
-
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     @Transactional

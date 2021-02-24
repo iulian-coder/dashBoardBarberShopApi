@@ -16,7 +16,6 @@ import java.util.Date;
 @Setter
 @Getter
 @Entity
-@ToString
 @Table(name = "clients")
 public class Client {
 
@@ -30,6 +29,7 @@ public class Client {
     @NotNull
     private String lastName;
 
+    @Email
     private String email;
 
     @NotNull

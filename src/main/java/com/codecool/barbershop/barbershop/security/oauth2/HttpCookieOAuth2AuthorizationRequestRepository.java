@@ -1,6 +1,5 @@
 package com.codecool.barbershop.barbershop.security.oauth2;
 
-import com.codecool.barbershop.barbershop.util.CookieUtils;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;

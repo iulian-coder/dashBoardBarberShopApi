@@ -1,10 +1,10 @@
 package com.codecool.barbershop.barbershop.booking;
 
-import com.codecool.barbershop.barbershop.booking.request.BookingReqAddNewBooking;
-import com.codecool.barbershop.barbershop.booking.request.BookingReqChangeStatus;
+import com.codecool.barbershop.barbershop.booking.payload.NewBookingRequest;
+import com.codecool.barbershop.barbershop.booking.payload.ChangeBookingStatusRequest;
 import com.codecool.barbershop.barbershop.client.Client;
 import com.codecool.barbershop.barbershop.client.ClientService;
-import com.codecool.barbershop.barbershop.client.request.ClientProfile;
+import com.codecool.barbershop.barbershop.client.payload.ClientProfileRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -27,24 +27,24 @@ public class BookingService {
         return bookingRepository.findAll(pageRequest).getContent();
     }
 
-    public Booking saveNewBooking(BookingReqAddNewBooking bookingReqAddNewBooking) throws Exception {
+    public Booking saveNewBooking(NewBookingRequest newBookingRequest) throws Exception {
 
 //        Preparing the data
         Date today = new Date();
         Booking newBooking = new Booking();
-        Client client = clientService.getClientById(bookingReqAddNewBooking.getClientId());
+        Client client = clientService.getClientById(newBookingRequest.getClientId());
 
 //        Set the data & Save
         newBooking.setCreatedDate(today);
         newBooking.setUpdatedDate(today);
-        newBooking.setBookingDate(bookingReqAddNewBooking.getBookingDate());
+        newBooking.setBookingDate(newBookingRequest.getBookingDate());
         newBooking.setClient(client);
-        newBooking.setBookingNotes(bookingReqAddNewBooking.getBookingNotes());
+        newBooking.setBookingNotes(newBookingRequest.getBookingNotes());
 
         return bookingRepository.save(newBooking);
     }
 
-    public Booking updateStatusBooking(BookingReqChangeStatus bookingRequest) {
+    public Booking updateStatusBooking(ChangeBookingStatusRequest bookingRequest) {
         Optional<Booking> booking = bookingRepository.findById(bookingRequest.getId());
         if (booking.isEmpty()) return null;
         else {
@@ -68,20 +68,20 @@ public class BookingService {
 
     }
 
-    public ClientProfile getClientDataAndBookings(long clientId)  {
-        ClientProfile clientProfile = new ClientProfile();
+    public ClientProfileRequest getClientDataAndBookings(long clientId)  {
+        ClientProfileRequest clientProfileRequest = new ClientProfileRequest();
         Client client = clientService.getClientById(clientId);
 
-        clientProfile.setClientId(client.getClientId());
-        clientProfile.setFirstName(client.getFirstName());
-        clientProfile.setLastName(client.getLastName());
-        clientProfile.setPhoneNo(client.getPhoneNo());
-        clientProfile.setEmail(client.getEmail());
+        clientProfileRequest.setClientId(client.getClientId());
+        clientProfileRequest.setFirstName(client.getFirstName());
+        clientProfileRequest.setLastName(client.getLastName());
+        clientProfileRequest.setPhoneNo(client.getPhoneNo());
+        clientProfileRequest.setEmail(client.getEmail());
 
         List<Booking> clientBookings = bookingRepository.findAllByClient_ClientId(clientId, null);
-        clientProfile.setBookingList(clientBookings);
+        clientProfileRequest.setBookingList(clientBookings);
 
-        return clientProfile;
+        return clientProfileRequest;
     }
 
 

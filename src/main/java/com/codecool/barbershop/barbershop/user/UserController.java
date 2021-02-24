@@ -1,7 +1,6 @@
 package com.codecool.barbershop.barbershop.user;
 
 import com.codecool.barbershop.barbershop.exception.ResourceNotFoundException;
-import com.codecool.barbershop.barbershop.repository.UserRepository;
 import com.codecool.barbershop.barbershop.security.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

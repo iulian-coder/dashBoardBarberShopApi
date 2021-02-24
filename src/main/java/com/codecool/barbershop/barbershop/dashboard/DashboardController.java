@@ -12,8 +12,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 
 @RestController
-@CrossOrigin("*")
-@RequestMapping("api/v1/dashboard")
+@RequestMapping(path = "api/v1/dashboard")
 public class DashboardController {
     private final DashboardService dashboardService;
 

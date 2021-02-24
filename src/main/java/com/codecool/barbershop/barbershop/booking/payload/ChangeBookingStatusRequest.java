@@ -1,4 +1,4 @@
-package com.codecool.barbershop.barbershop.booking.request;
+package com.codecool.barbershop.barbershop.booking.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,9 +10,9 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingReqChangeStatus {
+public class ChangeBookingStatusRequest {
 
-    @NonNull
+    @NotEmpty
     private int id;
     @NotEmpty
     private String status;

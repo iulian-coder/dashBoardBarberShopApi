@@ -1,4 +1,4 @@
-package com.codecool.barbershop.barbershop.repository;
+package com.codecool.barbershop.barbershop.user;
 
 
 import com.codecool.barbershop.barbershop.user.User;

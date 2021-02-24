@@ -8,7 +8,7 @@ spring:
   jpa:
     show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
@@ -30,14 +30,3 @@ spring:
             scope:
               - email
               - public_profile
-
-
-#
-#app:
-#  oauth2:
-#    # After successfully authenticating with the OAuth2 Provider,
-#    # we'll be generating an auth token for the user and sending the token to the
-#    # redirectUri mentioned by the client in the /oauth2/authorize request.
-#    # We're not using cookies because they won't work well in mobile clients.
-#    authorizedRedirectUris:
-#      - http://localhost:3000/oauth2/redirect

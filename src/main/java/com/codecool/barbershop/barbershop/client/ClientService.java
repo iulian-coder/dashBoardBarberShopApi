@@ -1,6 +1,6 @@
 package com.codecool.barbershop.barbershop.client;
 
-import com.codecool.barbershop.barbershop.client.request.ClientSearchAutocompleteReq;
+import com.codecool.barbershop.barbershop.client.payload.ClientSearchAutocompleteRequest;
 import com.codecool.barbershop.barbershop.exception.ApiRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,20 +50,20 @@ public class ClientService {
     }
 
 
-    public List<ClientSearchAutocompleteReq> searchClientWithAutocomplete() {
-        List<ClientSearchAutocompleteReq> clientSearchAutocompleteReqList = new ArrayList<>();
+    public List<ClientSearchAutocompleteRequest> searchClientWithAutocomplete() {
+        List<ClientSearchAutocompleteRequest> clientSearchAutocompleteRequestList = new ArrayList<>();
         List<Client> allClients = clientRepository.findAll();
 
         for (Client client : allClients) {
-            ClientSearchAutocompleteReq autocompleteReq = new ClientSearchAutocompleteReq();
+            ClientSearchAutocompleteRequest autocompleteReq = new ClientSearchAutocompleteRequest();
             autocompleteReq.setId(client.getClientId());
             autocompleteReq.setFirstName(client.getFirstName());
             autocompleteReq.setLastName(client.getLastName());
             autocompleteReq.setPhoneNo(client.getPhoneNo());
             autocompleteReq.setNameAndPhone(client.getFirstName() + " " + client.getLastName() + " | Phone: " + client.getPhoneNo());
-            clientSearchAutocompleteReqList.add(autocompleteReq);
+            clientSearchAutocompleteRequestList.add(autocompleteReq);
         }
-        return clientSearchAutocompleteReqList;
+        return clientSearchAutocompleteRequestList;
     }
 
 
