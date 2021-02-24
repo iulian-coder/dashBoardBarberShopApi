@@ -1,11 +1,8 @@
 package com.codecool.barbershop.barbershop.user;
 
 
-import com.codecool.barbershop.barbershop.exception.ResourceNotFoundException;
-import com.codecool.barbershop.barbershop.user.User;
-import com.codecool.barbershop.barbershop.user.UserRepository;
+import com.codecool.barbershop.barbershop.exception.RecordNotFoundException;
 
-import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
-public class CustomUserDetailsService implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -30,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User", "id", id)
+                () -> new RecordNotFoundException("User id" + id)
         );
         return UserPrincipal.create(user);
     }

@@ -5,7 +5,7 @@ import com.codecool.barbershop.barbershop.security.oauth2.CustomOAuth2UserServic
 import com.codecool.barbershop.barbershop.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.codecool.barbershop.barbershop.security.oauth2.OAuth2AuthenticationFailureHandler;
 import com.codecool.barbershop.barbershop.security.oauth2.OAuth2AuthenticationSuccessHandler;
-import com.codecool.barbershop.barbershop.user.CustomUserDetailsService;
+import com.codecool.barbershop.barbershop.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 //    TUTORIAL https://www.callicoder.com/spring-boot-security-oauth2-social-login-part-1/
 
-    private final CustomUserDetailsService customUserDetailsService;
+    private final UserService userService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
-                .userDetailsService(customUserDetailsService)
+                .userDetailsService(userService)
                 .passwordEncoder(passwordEncoder());
     }
 
