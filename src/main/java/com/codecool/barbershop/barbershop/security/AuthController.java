@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Locale;
 
 @RestController
 @RequestMapping(path = "/auth")
@@ -36,7 +37,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -56,10 +56,11 @@ public class AuthController {
             throw new BadRequestException("Email address already in use.");
         }
 
+//        TODO refactor
         // Creating user's account
         User user = new User();
         user.setName(signUpRequest.getName());
-        user.setEmail(signUpRequest.getEmail());
+        user.setEmail(signUpRequest.getEmail().toLowerCase(Locale.ROOT));
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local);
 

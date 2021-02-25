@@ -1,7 +1,7 @@
 package com.codecool.barbershop.barbershop.configuration;
 
 import com.codecool.barbershop.barbershop.security.*;
-import com.codecool.barbershop.barbershop.security.oauth2.CustomOAuth2UserService;
+import com.codecool.barbershop.barbershop.user.UserOAuth2Service;
 import com.codecool.barbershop.barbershop.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.codecool.barbershop.barbershop.security.oauth2.OAuth2AuthenticationFailureHandler;
 import com.codecool.barbershop.barbershop.security.oauth2.OAuth2AuthenticationSuccessHandler;
@@ -27,11 +27,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true,  prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+//    The prePostEnabled property enables Spring Security pre/post annotations
+//    The securedEnabled property determines if the @Secured annotation should be enabled
+//    The jsr250Enabled property allows us to use the @RoleAllowed annotation
 
 //    TUTORIAL https://www.callicoder.com/spring-boot-security-oauth2-social-login-part-1/
 
     private final UserService userService;
-    private final CustomOAuth2UserService customOAuth2UserService;
+    private final UserOAuth2Service userOAuth2Service;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
@@ -94,7 +97,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .baseUri("/oauth2/callback/*")
                         .and()
                     .userInfoEndpoint()
-                        .userService(customOAuth2UserService)
+                        .userService(userOAuth2Service)
                         .and()
                     .successHandler(oAuth2AuthenticationSuccessHandler)
                     .failureHandler(oAuth2AuthenticationFailureHandler);

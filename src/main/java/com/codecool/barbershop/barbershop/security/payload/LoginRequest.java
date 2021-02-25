@@ -9,12 +9,12 @@ import lombok.Data;
 
 @Data
 public class LoginRequest {
-    @NotBlank
+    @NotBlank(message = "Email is mandatory")
     @Email
     private String email;
 
-    @NotBlank
-    @Min(4)
+    @NotBlank(message = "Password is mandatory")
+    @Min(message = "Password wrong",value = 4)
     private String password;
 
 }

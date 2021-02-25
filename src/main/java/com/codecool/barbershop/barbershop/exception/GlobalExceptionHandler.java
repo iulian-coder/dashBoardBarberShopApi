@@ -2,10 +2,11 @@ package com.codecool.barbershop.barbershop.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +40,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    protected ResponseEntity<Object> handleInputNotValid(MethodArgumentNotValidException ex, WebRequest request) {
+    public ResponseEntity<Object> handleInputNotValid(MethodArgumentNotValidException ex) {
         List<String> details = ex.getBindingResult().getFieldErrors().stream()
                 .map(err -> err.getDefaultMessage()).collect(Collectors.toList());
 
         ErrorResponse errorResponse = new ErrorResponse("Validations Fail", details);
+
+        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredential(BadCredentialsException ex){
+        List<String> details = new ArrayList<>();
+        details.add(ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse("Username or password wrong !", details);
 
         return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
     }
