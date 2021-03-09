@@ -1,4 +1,4 @@
-package com.codecool.barbershop.barbershop.booking.request;
+package com.codecool.barbershop.barbershop.booking.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingReqAddNewBooking {
+public class NewBookingRequest {
 
 
     private int clientId;

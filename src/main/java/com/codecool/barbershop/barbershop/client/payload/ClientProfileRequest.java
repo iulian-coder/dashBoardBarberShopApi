@@ -1,4 +1,4 @@
-package com.codecool.barbershop.barbershop.client.request;
+package com.codecool.barbershop.barbershop.client.payload;
 
 import com.codecool.barbershop.barbershop.booking.Booking;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientProfile {
+public class ClientProfileRequest {
 
     private long clientId;
     private String firstName;

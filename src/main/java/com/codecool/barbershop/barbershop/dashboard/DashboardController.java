@@ -1,5 +1,7 @@
 package com.codecool.barbershop.barbershop.dashboard;
 
+import com.codecool.barbershop.barbershop.security.CurrentUser;
+import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,8 +14,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 
 @RestController
-@CrossOrigin("*")
-@RequestMapping("api/v1/dashboard")
+@RequestMapping(path = "api/v1/dashboard")
 public class DashboardController {
     private final DashboardService dashboardService;
 
@@ -23,7 +24,7 @@ public class DashboardController {
     }
 
     @GetMapping
-    public DashboardData dashboardData() {
+    public DashboardData dashboardData(@CurrentUser UserPrincipal userPrincipal) {
 
         Date reportDate = new Date();
 //        TODO Sort option input from User If needed
@@ -31,7 +32,7 @@ public class DashboardController {
         Date firstDayOfTheMonth = java.sql.Date.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
         Date lastDayOfTheMonth = java.sql.Date.valueOf(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()));
 
-        return dashboardService.getDataForDashBoard(reportDate, firstDayOfTheMonth, lastDayOfTheMonth, sort);
+        return dashboardService.getDataForDashBoard(reportDate, firstDayOfTheMonth, lastDayOfTheMonth, sort, userPrincipal.getId());
     }
 
 

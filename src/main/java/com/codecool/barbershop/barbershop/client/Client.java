@@ -3,7 +3,10 @@ package com.codecool.barbershop.barbershop.client;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+import com.codecool.barbershop.barbershop.user.User;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,7 +16,6 @@ import java.util.Date;
 @Setter
 @Getter
 @Entity
-@ToString
 @Table(name = "clients")
 public class Client {
 
@@ -27,12 +29,11 @@ public class Client {
     @NotNull
     private String lastName;
 
-    @NotNull
     @Email
-    @Column(unique = true)
     private String email;
 
     @NotNull
+    @Column(unique = true)
     private String phoneNo;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -42,5 +43,9 @@ public class Client {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
 
+    @OneToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

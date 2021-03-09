@@ -1,19 +1,19 @@
 package com.codecool.barbershop.barbershop.exception;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
-@Getter
+@Data
 @AllArgsConstructor
-public class ApiException {
+public class ErrorResponse {
+
 
     private String message;
-//    private Throwable throwable;
-    private HttpStatus httpStatus;
-    private ZonedDateTime timestamp;
+    private List<String> details;
 
 
 }

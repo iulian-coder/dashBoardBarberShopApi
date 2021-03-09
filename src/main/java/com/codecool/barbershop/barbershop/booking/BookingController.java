@@ -1,10 +1,9 @@
 package com.codecool.barbershop.barbershop.booking;
 
-import com.codecool.barbershop.barbershop.booking.request.BookingReqAddNewBooking;
-import com.codecool.barbershop.barbershop.booking.request.BookingReqChangeStatus;
-import com.codecool.barbershop.barbershop.dashboard.DashboardData;
+import com.codecool.barbershop.barbershop.booking.payload.NewBookingRequest;
+import com.codecool.barbershop.barbershop.booking.payload.ChangeBookingStatusRequest;
 import com.codecool.barbershop.barbershop.sms.SmsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,18 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/bookings")
-@CrossOrigin("*")
+@RequestMapping(path = "api/v1/bookings")
+@AllArgsConstructor
 public class BookingController {
 
     private final BookingService bookingService;
     private final SmsService smsService;
-
-    @Autowired
-    public BookingController(BookingService bookingService, SmsService smsService) {
-        this.bookingService = bookingService;
-        this.smsService = smsService;
-    }
 
     @GetMapping
     List<Booking> getAllBooking(@RequestParam(defaultValue = "0") int page,
@@ -43,17 +36,16 @@ public class BookingController {
     }
 
     @PostMapping
-    public Booking saveNewBooking(@RequestBody BookingReqAddNewBooking bookingReqAddNewBooking) throws Exception {
-//        Add booking
-        Booking newBooking = bookingService.saveNewBooking(bookingReqAddNewBooking);
+    public Booking saveNewBooking(@RequestBody NewBookingRequest newBookingRequest) throws Exception {
+        Booking newBooking = bookingService.saveNewBooking(newBookingRequest);
 //        Send Sms notification
-        if (bookingReqAddNewBooking.isSendSms()) smsService.sendSmsNewBooking(newBooking);
+        if (newBookingRequest.isSendSms()) smsService.sendSmsNewBooking(newBooking);
         return newBooking;
 
     }
 
     @PutMapping
-    public Booking updateStatusBooking(@RequestBody BookingReqChangeStatus booking) {
+    public Booking updateStatusBooking(@RequestBody ChangeBookingStatusRequest booking) {
         return bookingService.updateStatusBooking(booking);
 
     }
