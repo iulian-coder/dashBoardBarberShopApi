@@ -1,6 +1,7 @@
 package com.codecool.barbershop.barbershop.user;
 
 
+import com.codecool.barbershop.barbershop.exception.BadRequestException;
 import com.codecool.barbershop.barbershop.exception.RecordNotFoundException;
 
 import lombok.AllArgsConstructor;
@@ -18,11 +19,13 @@ public class UserService implements UserDetailsService{
 
     private final UserRepository userRepository;
 
-
+    public User getUserById(long id){
+        return userRepository.findById(id).orElseThrow(()->new BadRequestException ("No user id" + id));
+    }
 
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new RecordNotFoundException("User id" + id)
+                () -> new RecordNotFoundException("User id " + id)
         );
         return UserPrincipal.create(user);
     }

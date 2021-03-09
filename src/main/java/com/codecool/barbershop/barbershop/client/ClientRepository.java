@@ -8,8 +8,7 @@ import java.util.Date;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
-    int countClientsByCreatedDateBetween(Date start, Date end);
+    int countClientsByCreatedDateBetweenAndUser_Id(Date start, Date end,Long userId);
 
-
-    boolean existsByPhoneNo(String phoneNumber);
+    boolean existsByPhoneNoAndUser_Id(String phoneNo, Long userId);
 }

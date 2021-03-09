@@ -4,8 +4,12 @@ import com.codecool.barbershop.barbershop.client.payload.AddClientRequest;
 import com.codecool.barbershop.barbershop.client.payload.ClientSearchAutocompleteRequest;
 import com.codecool.barbershop.barbershop.exception.RecordNotFoundException;
 import com.codecool.barbershop.barbershop.security.JwtTokenService;
+import com.codecool.barbershop.barbershop.user.User;
+import com.codecool.barbershop.barbershop.user.UserPrincipal;
+import com.codecool.barbershop.barbershop.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
@@ -21,21 +25,24 @@ import java.util.Optional;
 public class ClientService {
 
     private final ClientRepository clientRepository;
+    private final UserService userService;
 
 
     public List<Client> getAllClients(Pageable pageRequest) {
         return clientRepository.findAll(pageRequest).getContent();
     }
 
-    public Client addClient(AddClientRequest newClient) {
+    public Client addClient(AddClientRequest newClient, Long userId) {
         Date today = new Date();
         Client client = new Client();
+        User user = userService.getUserById(userId);
         client.setCreatedDate(today);
         client.setUpdatedDate(today);
         client.setFirstName(newClient.getFirstName());
         client.setLastName(newClient.getLastName());
         client.setEmail(newClient.getEmail());
         client.setPhoneNo(newClient.getPhoneNo());
+        client.setUser(user);
 
 
         return clientRepository.save(client);
@@ -48,10 +55,6 @@ public class ClientService {
     public void deleteClient(Client client) {
 
         clientRepository.delete(client);
-    }
-
-    public boolean existsByPhoneNo(String phoneNumber){
-        return clientRepository.existsByPhoneNo(phoneNumber);
     }
 
 
@@ -79,9 +82,13 @@ public class ClientService {
     }
 
 
-    public int countNewClientsDateBetween(Date start, Date end) {
-        return clientRepository.countClientsByCreatedDateBetween(start, end);
+    public int countNewClientsDateBetween(Date start, Date end, Long userId) {
+        return clientRepository.countClientsByCreatedDateBetweenAndUser_Id(start, end, userId);
     }
 
 
+    public boolean existsByPhoneNoAndUserId(String phoneNo, Long userId) {
+        boolean b = clientRepository.existsByPhoneNoAndUser_Id(phoneNo, userId);
+        return b;
+    }
 }

@@ -17,11 +17,11 @@ public class DashboardService {
     private final BookingService bookingService;
 
 
-    public DashboardData getDataForDashBoard(Date reportDate, Date start, Date end, Sort sort) {
+    public DashboardData getDataForDashBoard(Date reportDate, Date start, Date end, Sort sort, Long userId) {
         DashboardData data = new DashboardData();
 
         data.setReportDate(reportDate);
-        data.setNewClients(clientService.countNewClientsDateBetween(start, end));
+        data.setNewClients(clientService.countNewClientsDateBetween(start, end, userId));
         data.setTotalConfirmedBookings(bookingService.countBookingsByBookingDateBetweenAndBookingStatus(start, end, BookingStatus.CONFIRM));
         data.setTotalUpcomingBookings(bookingService.countBookingsByBookingDateBetweenAndBookingStatus(start, end, BookingStatus.UPCOMING));
         data.setTotalCanceledBookings(bookingService.countBookingsByBookingDateBetweenAndBookingStatus(start, end, BookingStatus.CANCEL));
