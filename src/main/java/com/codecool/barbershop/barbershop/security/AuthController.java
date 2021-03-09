@@ -55,6 +55,7 @@ public class AuthController {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new BadRequestException("Email address already in use.");
         }
+        System.out.println(signUpRequest);
 
 //        TODO refactor
         // Creating user's account
@@ -65,15 +66,16 @@ public class AuthController {
         user.setProvider(AuthProvider.local);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+//        User result = userRepository.save(user);
 
-        User result = userRepository.save(user);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/me")
-                .buildAndExpand(result.getId()).toUri();
-
-        return ResponseEntity.created(location)
-                .body(new SignupResponse(true, "User registered successfully"));
+//        URI location = ServletUriComponentsBuilder
+//                .fromCurrentContextPath().path("/user/me")
+//                .buildAndExpand(result.getId()).toUri();
+//
+//        return ResponseEntity.created(location)
+//                .body(new SignupResponse(true, "User registered successfully"));
+        return ResponseEntity.ok(new SignupResponse(true, "User registered successfully"));
     }
 
 }
