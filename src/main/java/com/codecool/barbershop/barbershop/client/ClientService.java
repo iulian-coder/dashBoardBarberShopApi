@@ -21,9 +21,6 @@ import java.util.Optional;
 public class ClientService {
 
     private final ClientRepository clientRepository;
-    private final JwtTokenService jwtTokenService;
-
-
 
 
     public List<Client> getAllClients(Pageable pageRequest) {
@@ -41,7 +38,6 @@ public class ClientService {
         client.setPhoneNo(newClient.getPhoneNo());
 
 
-
         return clientRepository.save(client);
     }
 
@@ -54,8 +50,12 @@ public class ClientService {
         clientRepository.delete(client);
     }
 
+    public boolean existsByPhoneNo(String phoneNumber){
+        return clientRepository.existsByPhoneNo(phoneNumber);
+    }
 
-    public Client getClientById(long clientId)  {
+
+    public Client getClientById(long clientId) {
         Optional<Client> clientModel = clientRepository.findById(clientId);
 
         return clientModel.orElseThrow(() -> new RecordNotFoundException("Client not found id:" + clientId));

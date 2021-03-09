@@ -2,15 +2,12 @@ package com.codecool.barbershop.barbershop.security.payload;
 
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 
 @Data
 public class SignUpRequest {
-    @NotBlank(message = "Name is mandatory")
-    @Min(message = "Name must be greater or equal to 3",value = 3)
+    @NotNull(message = "Name is mandatory")
+    @Size(message = "Name is mandatory",min = 3,max = 30)
     private String name;
 
     @NotBlank(message = "Email is mandatory")

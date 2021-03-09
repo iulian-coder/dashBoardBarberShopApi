@@ -11,5 +11,5 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     int countClientsByCreatedDateBetween(Date start, Date end);
 
 
-
+    boolean existsByPhoneNo(String phoneNumber);
 }

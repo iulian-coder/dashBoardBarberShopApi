@@ -4,6 +4,7 @@ import com.codecool.barbershop.barbershop.booking.BookingService;
 import com.codecool.barbershop.barbershop.client.payload.AddClientRequest;
 import com.codecool.barbershop.barbershop.client.payload.ClientProfileRequest;
 import com.codecool.barbershop.barbershop.client.payload.ClientSearchAutocompleteRequest;
+import com.codecool.barbershop.barbershop.exception.BadRequestException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,9 @@ public class ClientController {
 
     @PostMapping
     public Client addClient(@Valid @RequestBody AddClientRequest newClient) {
+        if (clientService.existsByPhoneNo(newClient.getPhoneNo())) {
+            throw new BadRequestException("Phone number already in use.");
+        }
 
         return clientService.addClient(newClient);
     }
