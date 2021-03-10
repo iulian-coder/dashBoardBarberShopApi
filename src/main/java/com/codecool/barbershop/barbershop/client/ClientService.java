@@ -3,18 +3,12 @@ package com.codecool.barbershop.barbershop.client;
 import com.codecool.barbershop.barbershop.client.payload.AddClientRequest;
 import com.codecool.barbershop.barbershop.client.payload.ClientSearchAutocompleteRequest;
 import com.codecool.barbershop.barbershop.exception.RecordNotFoundException;
-import com.codecool.barbershop.barbershop.security.JwtTokenService;
 import com.codecool.barbershop.barbershop.user.User;
-import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import com.codecool.barbershop.barbershop.user.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,8 +22,8 @@ public class ClientService {
     private final UserService userService;
 
 
-    public List<Client> getAllClients(Pageable pageRequest) {
-        return clientRepository.findAll(pageRequest).getContent();
+    public List<Client> getAllClientsByUserId(Long userId) {
+        return clientRepository.findAllByUser_Id(userId);
     }
 
     public Client addClient(AddClientRequest newClient, Long userId) {
@@ -58,16 +52,16 @@ public class ClientService {
     }
 
 
-    public Client getClientById(long clientId) {
-        Optional<Client> clientModel = clientRepository.findById(clientId);
+    public Client getClientByIdAndUserId(long clientId, Long userId) {
+        Optional<Client> clientModel = clientRepository.findByClientIdAndUser_Id(clientId, userId);
 
         return clientModel.orElseThrow(() -> new RecordNotFoundException("Client not found id:" + clientId));
     }
 
 
-    public List<ClientSearchAutocompleteRequest> searchClientWithAutocomplete() {
+    public List<ClientSearchAutocompleteRequest> searchClientWithAutocomplete(Long userId) {
         List<ClientSearchAutocompleteRequest> clientSearchAutocompleteRequestList = new ArrayList<>();
-        List<Client> allClients = clientRepository.findAll();
+        List<Client> allClients = getAllClientsByUserId(userId);
 
         for (Client client : allClients) {
             ClientSearchAutocompleteRequest autocompleteReq = new ClientSearchAutocompleteRequest();
@@ -82,7 +76,7 @@ public class ClientService {
     }
 
 
-    public int countNewClientsDateBetween(Date start, Date end, Long userId) {
+    public int countNewClientsDateBetweenAndUserId(Date start, Date end, Long userId) {
         return clientRepository.countClientsByCreatedDateBetweenAndUser_Id(start, end, userId);
     }
 

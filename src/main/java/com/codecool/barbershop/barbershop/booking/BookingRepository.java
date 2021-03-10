@@ -19,11 +19,9 @@ interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     List<Booking> findAllByClient_ClientId(Long i, Sort sort);
 
-    int countBookingsByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus status);
+    int countBookingsByBookingDateBetweenAndBookingStatusAndClient_User_Id(Date start, Date end, BookingStatus status, Long userId);
 
-    List<Booking> findAllByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus status, Sort sort);
+    List<Booking> findAllByBookingDateBetweenAndBookingStatusAndClient_User_Id(Date start, Date end, BookingStatus status, Sort sort, Long userId);
 
-
-
-
+    List<Booking> findAllByClient_User_Id(Long userId);
 }

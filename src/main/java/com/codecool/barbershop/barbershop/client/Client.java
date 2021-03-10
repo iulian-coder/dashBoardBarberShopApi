@@ -33,7 +33,6 @@ public class Client {
     private String email;
 
     @NotNull
-    @Column(unique = true)
     private String phoneNo;
 
     @Temporal(TemporalType.TIMESTAMP)

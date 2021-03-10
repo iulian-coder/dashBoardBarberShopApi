@@ -2,7 +2,9 @@ package com.codecool.barbershop.barbershop.booking;
 
 import com.codecool.barbershop.barbershop.booking.payload.NewBookingRequest;
 import com.codecool.barbershop.barbershop.booking.payload.ChangeBookingStatusRequest;
+import com.codecool.barbershop.barbershop.security.CurrentUser;
 import com.codecool.barbershop.barbershop.sms.SmsService;
+import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,23 +23,23 @@ public class BookingController {
 
     @GetMapping
     List<Booking> getAllBooking(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "10") int size) {
+                                @RequestParam(defaultValue = "10") int size, @CurrentUser UserPrincipal userPrincipal) {
 //        TODO Sort option input from User
         Sort sort = Sort.by("createdDate").descending();
         Pageable pageRequest = PageRequest.of(page, size, sort);
-        return bookingService.getAllBookings(pageRequest);
+        return bookingService.getAllBookings(pageRequest, userPrincipal.getId());
     }
 
     @GetMapping("history/{clientId}")
-    List<Booking> getAllBookingsByClientId(@PathVariable Long clientId) {
+    List<Booking> getAllBookingsByClientId(@PathVariable Long clientId ) {
 //        TODO Sort option input from User
         Sort sort = Sort.by("createdDate").descending();
-        return bookingService.getAllBookingsByClientId(clientId, sort);
+        return bookingService.getAllBookingsByClientId(clientId, sort );
     }
 
     @PostMapping
-    public Booking saveNewBooking(@RequestBody NewBookingRequest newBookingRequest) throws Exception {
-        Booking newBooking = bookingService.saveNewBooking(newBookingRequest);
+    public Booking saveNewBooking(@RequestBody NewBookingRequest newBookingRequest, @CurrentUser UserPrincipal userPrincipal)  {
+        Booking newBooking = bookingService.saveNewBooking(newBookingRequest, userPrincipal.getId());
 //        Send Sms notification
         if (newBookingRequest.isSendSms()) smsService.sendSmsNewBooking(newBooking);
         return newBooking;
