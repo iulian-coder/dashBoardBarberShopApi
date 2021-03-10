@@ -69,8 +69,9 @@ public class BookingService {
     }
 
     public ClientProfileRequest getClientDataAndBookings(long clientId, Long userId)  {
-        ClientProfileRequest clientProfileRequest = new ClientProfileRequest();
         Client client = clientService.getClientByIdAndUserId(clientId, userId);
+
+        ClientProfileRequest clientProfileRequest = new ClientProfileRequest();
 
         clientProfileRequest.setClientId(client.getClientId());
         clientProfileRequest.setFirstName(client.getFirstName());

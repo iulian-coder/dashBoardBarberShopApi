@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -33,8 +34,10 @@ public class ClientController {
 
 
     @GetMapping("{clientId}")
-    public ClientProfileRequest clientProfile(@PathVariable("clientId") long clientId,@CurrentUser UserPrincipal userPrincipal) {
-        return bookingService.getClientDataAndBookings(clientId, userPrincipal.getId());
+    public ClientProfileRequest clientProfile(@PathVariable("clientId") long clientId, @CurrentUser UserPrincipal userPrincipal) {
+            return bookingService.getClientDataAndBookings(clientId, userPrincipal.getId());
+
+
     }
 
 
