@@ -23,16 +23,16 @@ public class BookingService {
         this.clientService = clientService;
     }
 
-    public List<Booking> getAllBookings(Pageable pageRequest) {
-        return bookingRepository.findAll(pageRequest).getContent();
+    public List<Booking> getAllBookings(Pageable pageRequest, Long userId) {
+        return bookingRepository.findAllByClient_User_Id(userId);
     }
 
-    public Booking saveNewBooking(NewBookingRequest newBookingRequest) throws Exception {
+    public Booking saveNewBooking(NewBookingRequest newBookingRequest, Long userId)  {
 
 //        Preparing the data
         Date today = new Date();
         Booking newBooking = new Booking();
-        Client client = clientService.getClientById(newBookingRequest.getClientId());
+        Client client = clientService.getClientByIdAndUserId(newBookingRequest.getClientId(), userId);
 
 //        Set the data & Save
         newBooking.setCreatedDate(today);
@@ -55,22 +55,23 @@ public class BookingService {
         }
     }
 
-    public List<Booking> getAllBookingsByClientId(Long clientId, Sort sort) {
+    public List<Booking> getAllBookingsByClientId(Long clientId, Sort sort ) {
         return bookingRepository.findAllByClient_ClientId(clientId, sort);
     }
 
-    public int countBookingsByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus bookingStatus) {
-        return bookingRepository.countBookingsByBookingDateBetweenAndBookingStatus(start, end, bookingStatus);
+    public int countBookingsByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus bookingStatus, Long userId) {
+        return bookingRepository.countBookingsByBookingDateBetweenAndBookingStatusAndClient_User_Id(start, end, bookingStatus,userId);
     }
 
-    public List<Booking> findAllByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus bookingStatus, Sort sort) {
-        return bookingRepository.findAllByBookingDateBetweenAndBookingStatus(start, end, bookingStatus, sort);
+    public List<Booking> findAllByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus bookingStatus, Sort sort, Long userId) {
+        return bookingRepository.findAllByBookingDateBetweenAndBookingStatusAndClient_User_Id(start, end, bookingStatus, sort, userId);
 
     }
 
-    public ClientProfileRequest getClientDataAndBookings(long clientId)  {
+    public ClientProfileRequest getClientDataAndBookings(long clientId, Long userId)  {
+        Client client = clientService.getClientByIdAndUserId(clientId, userId);
+
         ClientProfileRequest clientProfileRequest = new ClientProfileRequest();
-        Client client = clientService.getClientById(clientId);
 
         clientProfileRequest.setClientId(client.getClientId());
         clientProfileRequest.setFirstName(client.getFirstName());

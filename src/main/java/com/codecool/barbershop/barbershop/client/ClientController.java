@@ -8,12 +8,10 @@ import com.codecool.barbershop.barbershop.exception.BadRequestException;
 import com.codecool.barbershop.barbershop.security.CurrentUser;
 import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -27,17 +25,19 @@ public class ClientController {
 
     @GetMapping
     public List<Client> getAllClients(@RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "10") int size) {
+                                      @RequestParam(defaultValue = "10") int size, @CurrentUser UserPrincipal userPrincipal) {
 //        TODO Sort option input from User
-        Sort sort = Sort.by("createdDate").descending();
-        Pageable pageRequest = PageRequest.of(page, size, sort);
-        return clientService.getAllClients(pageRequest);
+//        Sort sort = Sort.by("createdDate").descending();
+//        Pageable pageRequest = PageRequest.of(page, size, sort);
+        return clientService.getAllClientsByUserId(userPrincipal.getId());
     }
 
 
     @GetMapping("{clientId}")
-    public ClientProfileRequest clientProfile(@PathVariable("clientId") long clientId) {
-        return bookingService.getClientDataAndBookings(clientId);
+    public ClientProfileRequest clientProfile(@PathVariable("clientId") long clientId, @CurrentUser UserPrincipal userPrincipal) {
+            return bookingService.getClientDataAndBookings(clientId, userPrincipal.getId());
+
+
     }
 
 
@@ -62,8 +62,8 @@ public class ClientController {
     }
 
     @GetMapping("search-client")
-    public List<ClientSearchAutocompleteRequest> searchClientWithAutocomplete() {
-        return clientService.searchClientWithAutocomplete();
+    public List<ClientSearchAutocompleteRequest> searchClientWithAutocomplete(@CurrentUser UserPrincipal userPrincipal) {
+        return clientService.searchClientWithAutocomplete(userPrincipal.getId());
     }
 
 }
