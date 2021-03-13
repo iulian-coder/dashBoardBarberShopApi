@@ -18,7 +18,7 @@ import java.util.Date;
 @Slf4j
 public class JwtTokenService {
 
-    private final String tokenSecret = System.getProperty("TOKEN_SECRET");
+    private final String tokenSecret = "926D96C90030DD58429D2751AC1BDBBCnbutrbnurbwnmitjiwbtnwubnturwio38bg";
     private final long tokenExpire = 36000000;
 
     private SecretKey getSecretKey() {
