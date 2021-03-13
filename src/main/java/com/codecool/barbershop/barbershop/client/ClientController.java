@@ -1,17 +1,15 @@
 package com.codecool.barbershop.barbershop.client;
 
 import com.codecool.barbershop.barbershop.booking.BookingService;
-import com.codecool.barbershop.barbershop.client.payload.AddClientRequest;
-import com.codecool.barbershop.barbershop.client.payload.ClientProfileRequest;
-import com.codecool.barbershop.barbershop.client.payload.ClientSearchAutocompleteRequest;
+import com.codecool.barbershop.barbershop.client.payload.*;
 import com.codecool.barbershop.barbershop.exception.BadRequestException;
 import com.codecool.barbershop.barbershop.security.CurrentUser;
 import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -36,33 +34,30 @@ public class ClientController {
     @GetMapping("{clientId}")
     public ClientProfileRequest clientProfile(@PathVariable("clientId") long clientId, @CurrentUser UserPrincipal userPrincipal) {
             return bookingService.getClientDataAndBookings(clientId, userPrincipal.getId());
-
-
     }
 
 
     @PostMapping
     public Client addClient(@Valid @RequestBody AddClientRequest newClient, @CurrentUser UserPrincipal userPrincipal) {
         if (clientService.existsByPhoneNoAndUserId(newClient.getPhoneNo(), userPrincipal.getId())) {
-
             throw new BadRequestException("Phone number already in use.");
         }
-//
         return clientService.addClient(newClient, userPrincipal.getId());
     }
 
     @PutMapping
-    public Client updateClient(@RequestBody Client client) {
-        return clientService.updateClient(client);
+    public ResponseEntity<ClientModifyResponse> updateClient(@RequestBody ClientModifyRequest client, @CurrentUser UserPrincipal userPrincipal) {
+        Client updateClient = clientService.updateClient(client, userPrincipal.getId());
+        return ResponseEntity.ok(new ClientModifyResponse(true, "Client modify success  " + updateClient.getFirstName()));
     }
 
     @DeleteMapping
-    public void deleteClient(@RequestBody Client client) {
-        clientService.deleteClient(client);
+    public void deleteClient(@RequestBody ClientModifyRequest client, @CurrentUser UserPrincipal userPrincipal) {
+        clientService.deleteClient(client, userPrincipal.getId());
     }
 
     @GetMapping("search-client")
-    public List<ClientSearchAutocompleteRequest> searchClientWithAutocomplete(@CurrentUser UserPrincipal userPrincipal) {
+    public List<ClientSearchResponse> searchClientWithAutocomplete(@CurrentUser UserPrincipal userPrincipal) {
         return clientService.searchClientWithAutocomplete(userPrincipal.getId());
     }
 

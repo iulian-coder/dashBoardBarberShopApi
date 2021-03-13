@@ -42,9 +42,7 @@ public class AuthController {
                         loginRequest.getPassword()
                 )
         );
-
         String token = jwtTokenServices.createToken(authentication);
-        System.out.println("login");
         return ResponseEntity.ok(new LoginResponse(token));
     }
 

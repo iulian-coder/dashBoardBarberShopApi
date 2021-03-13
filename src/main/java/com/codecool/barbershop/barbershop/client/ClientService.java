@@ -1,7 +1,8 @@
 package com.codecool.barbershop.barbershop.client;
 
 import com.codecool.barbershop.barbershop.client.payload.AddClientRequest;
-import com.codecool.barbershop.barbershop.client.payload.ClientSearchAutocompleteRequest;
+import com.codecool.barbershop.barbershop.client.payload.ClientModifyRequest;
+import com.codecool.barbershop.barbershop.client.payload.ClientSearchResponse;
 import com.codecool.barbershop.barbershop.exception.RecordNotFoundException;
 import com.codecool.barbershop.barbershop.user.User;
 import com.codecool.barbershop.barbershop.user.UserService;
@@ -26,10 +27,17 @@ public class ClientService {
         return clientRepository.findAllByUser_Id(userId);
     }
 
+    public Client getClientByIdAndUserId(long clientId, Long userId) {
+        Optional<Client> clientModel = clientRepository.findByClientIdAndUser_Id(clientId, userId);
+
+        return clientModel.orElseThrow(() -> new RecordNotFoundException("Client not found id:" + clientId));
+    }
+
     public Client addClient(AddClientRequest newClient, Long userId) {
         Date today = new Date();
         Client client = new Client();
         User user = userService.getUserById(userId);
+
         client.setCreatedDate(today);
         client.setUpdatedDate(today);
         client.setFirstName(newClient.getFirstName());
@@ -38,41 +46,36 @@ public class ClientService {
         client.setPhoneNo(newClient.getPhoneNo());
         client.setUser(user);
 
-
         return clientRepository.save(client);
     }
 
-    public Client updateClient(Client client) {
-        return clientRepository.save(client);
-    }
 
-    public void deleteClient(Client client) {
-
-        clientRepository.delete(client);
-    }
-
-
-    public Client getClientByIdAndUserId(long clientId, Long userId) {
-        Optional<Client> clientModel = clientRepository.findByClientIdAndUser_Id(clientId, userId);
-
-        return clientModel.orElseThrow(() -> new RecordNotFoundException("Client not found id:" + clientId));
+    public Client updateClient(ClientModifyRequest client, Long userId) {
+        Client clientModel = getClientByIdAndUserId(client.getClientId(), userId);
+        Date today = new Date();
+        clientModel.setEmail(client.getEmail());
+        clientModel.setPhoneNo(clientModel.getPhoneNo());
+        clientModel.setFirstName(client.getFirstName());
+        clientModel.setLastName(clientModel.getLastName());
+        clientModel.setUpdatedDate(today);
+        return clientRepository.save(clientModel);
     }
 
 
-    public List<ClientSearchAutocompleteRequest> searchClientWithAutocomplete(Long userId) {
-        List<ClientSearchAutocompleteRequest> clientSearchAutocompleteRequestList = new ArrayList<>();
+    public List<ClientSearchResponse> searchClientWithAutocomplete(Long userId) {
+        List<ClientSearchResponse> clientSearchResponseList = new ArrayList<>();
         List<Client> allClients = getAllClientsByUserId(userId);
 
         for (Client client : allClients) {
-            ClientSearchAutocompleteRequest autocompleteReq = new ClientSearchAutocompleteRequest();
+            ClientSearchResponse autocompleteReq = new ClientSearchResponse();
             autocompleteReq.setId(client.getClientId());
             autocompleteReq.setFirstName(client.getFirstName());
             autocompleteReq.setLastName(client.getLastName());
             autocompleteReq.setPhoneNo(client.getPhoneNo());
             autocompleteReq.setNameAndPhone(client.getFirstName() + " " + client.getLastName() + " | Phone: " + client.getPhoneNo());
-            clientSearchAutocompleteRequestList.add(autocompleteReq);
+            clientSearchResponseList.add(autocompleteReq);
         }
-        return clientSearchAutocompleteRequestList;
+        return clientSearchResponseList;
     }
 
 
@@ -82,7 +85,11 @@ public class ClientService {
 
 
     public boolean existsByPhoneNoAndUserId(String phoneNo, Long userId) {
-        boolean b = clientRepository.existsByPhoneNoAndUser_Id(phoneNo, userId);
-        return b;
+        return clientRepository.existsByPhoneNoAndUser_Id(phoneNo, userId);
+    }
+
+    public void deleteClient(ClientModifyRequest client, Long id) {
+        Client clientToDelete = getClientByIdAndUserId(client.getClientId(), id);
+        clientRepository.delete(clientToDelete);
     }
 }

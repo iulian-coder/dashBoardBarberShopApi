@@ -70,7 +70,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
-        System.out.println(reactUrlRedirect);
         List<String> authorizedRedirectUris = new ArrayList<>(List.of(reactUrlRedirect));
         return authorizedRedirectUris
                 .stream()

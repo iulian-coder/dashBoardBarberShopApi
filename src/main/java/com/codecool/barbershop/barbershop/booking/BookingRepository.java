@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 interface BookingRepository extends JpaRepository<Booking, Integer> {
@@ -24,4 +25,5 @@ interface BookingRepository extends JpaRepository<Booking, Integer> {
     List<Booking> findAllByBookingDateBetweenAndBookingStatusAndClient_User_Id(Date start, Date end, BookingStatus status, Sort sort, Long userId);
 
     List<Booking> findAllByClient_User_Id(Long userId);
+
 }
