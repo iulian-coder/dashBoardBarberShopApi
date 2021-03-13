@@ -68,7 +68,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         URI clientRedirectUri = URI.create(uri);
         String reactUrlRedirect = System.getProperty("REACT_APP_URL_REDIRECT");
         List<String> authorizedRedirectUris = new ArrayList<>(List.of(reactUrlRedirect));
-
+        System.out.println(reactUrlRedirect);
         return authorizedRedirectUris
                 .stream()
                 .anyMatch(authorizedRedirectUri -> {
