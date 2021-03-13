@@ -1,4 +1,4 @@
-package com.codecool.barbershop.barbershop.client.request;
+package com.codecool.barbershop.barbershop.client.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientSearchAutocompleteReq {
+public class ClientSearchAutocompleteRequest {
 
     private Long id;
     private String firstName;

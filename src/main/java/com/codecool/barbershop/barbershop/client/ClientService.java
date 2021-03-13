@@ -1,8 +1,11 @@
 package com.codecool.barbershop.barbershop.client;
 
-import com.codecool.barbershop.barbershop.client.request.ClientSearchAutocompleteReq;
-import com.codecool.barbershop.barbershop.exception.ApiRequestException;
-import org.springframework.data.domain.Pageable;
+import com.codecool.barbershop.barbershop.client.payload.AddClientRequest;
+import com.codecool.barbershop.barbershop.client.payload.ClientSearchAutocompleteRequest;
+import com.codecool.barbershop.barbershop.exception.RecordNotFoundException;
+import com.codecool.barbershop.barbershop.user.User;
+import com.codecool.barbershop.barbershop.user.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
@@ -12,24 +15,30 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ClientService {
 
     private final ClientRepository clientRepository;
+    private final UserService userService;
 
-    public ClientService(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
 
+    public List<Client> getAllClientsByUserId(Long userId) {
+        return clientRepository.findAllByUser_Id(userId);
     }
 
-
-    public List<Client> getAllClients(Pageable pageRequest) {
-        return clientRepository.findAll(pageRequest).getContent();
-    }
-
-    public Client addClient(Client client) {
+    public Client addClient(AddClientRequest newClient, Long userId) {
         Date today = new Date();
+        Client client = new Client();
+        User user = userService.getUserById(userId);
         client.setCreatedDate(today);
         client.setUpdatedDate(today);
+        client.setFirstName(newClient.getFirstName());
+        client.setLastName(newClient.getLastName());
+        client.setEmail(newClient.getEmail());
+        client.setPhoneNo(newClient.getPhoneNo());
+        client.setUser(user);
+
+
         return clientRepository.save(client);
     }
 
@@ -43,33 +52,37 @@ public class ClientService {
     }
 
 
-    public Client getClientById(long clientId)  {
-        Optional<Client> clientModel = clientRepository.findById(clientId);
+    public Client getClientByIdAndUserId(long clientId, Long userId) {
+        Optional<Client> clientModel = clientRepository.findByClientIdAndUser_Id(clientId, userId);
 
-        return clientModel.orElseThrow(() -> new ApiRequestException("Client not found id:" + clientId));
+        return clientModel.orElseThrow(() -> new RecordNotFoundException("Client not found id:" + clientId));
     }
 
 
-    public List<ClientSearchAutocompleteReq> searchClientWithAutocomplete() {
-        List<ClientSearchAutocompleteReq> clientSearchAutocompleteReqList = new ArrayList<>();
-        List<Client> allClients = clientRepository.findAll();
+    public List<ClientSearchAutocompleteRequest> searchClientWithAutocomplete(Long userId) {
+        List<ClientSearchAutocompleteRequest> clientSearchAutocompleteRequestList = new ArrayList<>();
+        List<Client> allClients = getAllClientsByUserId(userId);
 
         for (Client client : allClients) {
-            ClientSearchAutocompleteReq autocompleteReq = new ClientSearchAutocompleteReq();
+            ClientSearchAutocompleteRequest autocompleteReq = new ClientSearchAutocompleteRequest();
             autocompleteReq.setId(client.getClientId());
             autocompleteReq.setFirstName(client.getFirstName());
             autocompleteReq.setLastName(client.getLastName());
             autocompleteReq.setPhoneNo(client.getPhoneNo());
             autocompleteReq.setNameAndPhone(client.getFirstName() + " " + client.getLastName() + " | Phone: " + client.getPhoneNo());
-            clientSearchAutocompleteReqList.add(autocompleteReq);
+            clientSearchAutocompleteRequestList.add(autocompleteReq);
         }
-        return clientSearchAutocompleteReqList;
+        return clientSearchAutocompleteRequestList;
     }
 
 
-    public int countNewClientsDateBetween(Date start, Date end) {
-        return clientRepository.countClientsByCreatedDateBetween(start, end);
+    public int countNewClientsDateBetweenAndUserId(Date start, Date end, Long userId) {
+        return clientRepository.countClientsByCreatedDateBetweenAndUser_Id(start, end, userId);
     }
 
 
+    public boolean existsByPhoneNoAndUserId(String phoneNo, Long userId) {
+        boolean b = clientRepository.existsByPhoneNoAndUser_Id(phoneNo, userId);
+        return b;
+    }
 }
