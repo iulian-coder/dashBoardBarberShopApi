@@ -3,10 +3,6 @@ package com.codecool.barbershop.barbershop.user;
 import com.codecool.barbershop.barbershop.exception.OAuth2AuthenticationProcessingException;
 import com.codecool.barbershop.barbershop.security.oauth2.user.OAuth2UserInfo;
 import com.codecool.barbershop.barbershop.security.oauth2.user.OAuth2UserInfoFactory;
-import com.codecool.barbershop.barbershop.user.AuthProvider;
-import com.codecool.barbershop.barbershop.user.User;
-import com.codecool.barbershop.barbershop.user.UserPrincipal;
-import com.codecool.barbershop.barbershop.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -23,7 +19,6 @@ import java.util.Optional;
 @Service
 public class UserOAuth2Service extends DefaultOAuth2UserService {
 
-//    private final UserRepository userRepository;
     private final UserService userService;
 
     @Override

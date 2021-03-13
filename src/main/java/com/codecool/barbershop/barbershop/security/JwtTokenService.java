@@ -32,14 +32,12 @@ public class JwtTokenService {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + tokenExpire);
 
-        String tokenResult = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(userId)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
-        System.out.println(tokenResult);
-        return tokenResult;
     }
 
     public Long getUserIdFromToken(String token) {
