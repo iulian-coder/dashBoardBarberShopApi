@@ -64,11 +64,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 
     private boolean isAuthorizedRedirectUri(String uri) {
-//        TODO Refactor to env the redirect uri
         URI clientRedirectUri = URI.create(uri);
         String reactUrlRedirect = System.getProperty("REACT_APP_URL_REDIRECT");
         List<String> authorizedRedirectUris = new ArrayList<>(List.of(reactUrlRedirect));
-        System.out.println(reactUrlRedirect);
         return authorizedRedirectUris
                 .stream()
                 .anyMatch(authorizedRedirectUri -> {
