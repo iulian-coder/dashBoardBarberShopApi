@@ -4,9 +4,10 @@ import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +17,17 @@ import java.util.Date;
 
 @Service
 @Slf4j
+@AllArgsConstructor
+@NoArgsConstructor
 public class JwtTokenService {
 
-    private final String tokenSecret = "926D96C90030DD58429D2751AC1BDBBCnbutrbnurbwnmitjiwbtnwubnturwio38bg";
+    @Value("${TOKEN_SECRET:Default}")
+    private String tokenSecret;
     private final long tokenExpire = 36000000;
 
     private SecretKey getSecretKey() {
-        return Keys.hmacShaKeyFor(tokenSecret.getBytes(StandardCharsets.UTF_8));
+        return
+                Keys.hmacShaKeyFor(tokenSecret.getBytes(StandardCharsets.UTF_8));
     }
 
     public String createToken(Authentication authentication) {

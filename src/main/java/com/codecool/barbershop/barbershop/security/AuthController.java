@@ -43,10 +43,7 @@ public class AuthController {
                 )
         );
 
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-       
         String token = jwtTokenServices.createToken(authentication);
-        System.out.println(token);
         System.out.println("login");
         return ResponseEntity.ok(new LoginResponse(token));
     }

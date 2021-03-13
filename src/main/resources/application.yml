@@ -31,6 +31,6 @@ spring:
               - email
               - public_profile
 
-server:
-  error:
-    include-stacktrace: never
+#server:
+#  error:
+#    include-stacktrace: never

@@ -4,6 +4,8 @@ package com.codecool.barbershop.barbershop.security.oauth2;
 import com.codecool.barbershop.barbershop.exception.BadRequestException;
 import com.codecool.barbershop.barbershop.security.JwtTokenService;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtTokenService jwtTokenServices;
 
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+
+    @Value("${REACT_APP_URL_REDIRECT:Default}")
+    private final String reactUrlRedirect = null;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -65,7 +70,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
-        String reactUrlRedirect = System.getProperty("REACT_APP_URL_REDIRECT");
+        System.out.println(reactUrlRedirect);
         List<String> authorizedRedirectUris = new ArrayList<>(List.of(reactUrlRedirect));
         return authorizedRedirectUris
                 .stream()
