@@ -6,8 +6,8 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -23,19 +23,18 @@ public class JwtTokenService {
 
     @Value("${TOKEN_SECRET:Default}")
     private String tokenSecret;
-    private final long tokenExpire = 36000000;
+
 
     private SecretKey getSecretKey() {
         return
                 Keys.hmacShaKeyFor(tokenSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String userId = Long.toString(userPrincipal.getId());
+    public String createToken(String userId) {
+        long tokenExpirationTime = 900000; // 15 minute
 
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + tokenExpire);
+        Date expiryDate = new Date(now.getTime() + tokenExpirationTime);
 
         return Jwts.builder()
                 .setSubject(userId)
@@ -43,6 +42,11 @@ public class JwtTokenService {
                 .setExpiration(expiryDate)
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    //    TODO refresh-token
+    public String createRefreshToken(String userId) {
+        return null;
     }
 
     public Long getUserIdFromToken(String token) {

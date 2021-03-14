@@ -3,7 +3,7 @@ package com.codecool.barbershop.barbershop.client;
 import com.codecool.barbershop.barbershop.booking.BookingService;
 import com.codecool.barbershop.barbershop.client.payload.*;
 import com.codecool.barbershop.barbershop.exception.BadRequestException;
-import com.codecool.barbershop.barbershop.security.CurrentUser;
+import com.codecool.barbershop.barbershop.user.CurrentUser;
 import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

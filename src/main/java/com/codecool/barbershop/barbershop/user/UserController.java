@@ -1,6 +1,5 @@
 package com.codecool.barbershop.barbershop.user;
 
-import com.codecool.barbershop.barbershop.security.CurrentUser;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ public class UserController {
     @GetMapping("/user/me")
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return userService.findUserById(userPrincipal.getId());
+
     }
 
     @PostMapping("/user/me")

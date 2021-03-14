@@ -3,8 +3,8 @@ package com.codecool.barbershop.barbershop.security.oauth2;
 
 import com.codecool.barbershop.barbershop.exception.BadRequestException;
 import com.codecool.barbershop.barbershop.security.JwtTokenService;
+import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -29,6 +29,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
+    /*
+        After successfully authenticating with the OAuth2 Provider,
+        it will be generating an auth token for the user
+        and sending the token to the reactUrlRedirect mentioned.
+        Not using cookies because they won't work well in mobile clients
+    */
     @Value("${REACT_APP_URL_REDIRECT:Default}")
     private final String reactUrlRedirect = null;
 
@@ -55,7 +61,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String token = jwtTokenServices.createToken(authentication);
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        String userId = Long.toString(userPrincipal.getId());
+
+        String token = jwtTokenServices.createToken(userId);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)
