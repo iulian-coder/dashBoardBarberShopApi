@@ -31,7 +31,7 @@ public class JwtTokenService {
     }
 
     public String createToken(String userId) {
-        long tokenExpirationTime = 900000; // 15 minute
+        long tokenExpirationTime = 1800000; // 30 minutes
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + tokenExpirationTime);
