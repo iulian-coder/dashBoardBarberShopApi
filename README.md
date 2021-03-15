@@ -1,6 +1,6 @@
 # DashboardBarbershop App
 
-DashboardBarbershop is management app for keeping track of customers. The user can register the clients, make reservation for them and view their reservation history.
+DashboardBarbershop is a management app for keeping track of customers. The user can register the clients, make reservations, send SMS notifications and view their reservations history.
 
 ## Demo
 
@@ -15,7 +15,7 @@ https://dashboardbarbershop.herokuapp.com
 * Front-End: React
     * https://github.com/iulian-coder/dashBoardBarberShop
     * Axios
-    * Bootstrap apply AdminLTE template
+    * Bootstrap's AdminLTE template (for admin dashboard & control panel)
     * React router-dom, hook-form, datepicker, toastify, search-autocomplete, phone-input-2, query-string
     
 
