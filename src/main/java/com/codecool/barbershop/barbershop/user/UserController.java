@@ -3,6 +3,7 @@ package com.codecool.barbershop.barbershop.user;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/user/me")
+    @DeleteMapping("/user/me")
     public ResponseEntity<?> deleteUser(@CurrentUser UserPrincipal userPrincipal) {
 
         userService.deleteUserById(userPrincipal.getId());

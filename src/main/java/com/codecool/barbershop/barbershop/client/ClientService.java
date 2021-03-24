@@ -7,6 +7,7 @@ import com.codecool.barbershop.barbershop.exception.RecordNotFoundException;
 import com.codecool.barbershop.barbershop.user.User;
 import com.codecool.barbershop.barbershop.user.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
@@ -36,7 +37,7 @@ public class ClientService {
     public Client addClient(AddClientRequest newClient, Long userId) {
         Date today = new Date();
         Client client = new Client();
-        User user = userService.getUserById(userId);
+        User user = userService.findUserById(userId);
 
         client.setCreatedDate(today);
         client.setUpdatedDate(today);
