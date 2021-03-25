@@ -7,9 +7,10 @@ import com.codecool.barbershop.barbershop.exception.RecordNotFoundException;
 import com.codecool.barbershop.barbershop.user.User;
 import com.codecool.barbershop.barbershop.user.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +25,7 @@ public class ClientService {
     private final UserService userService;
 
 
-    public List<Client> getAllClientsByUserId(Long userId) {
+    public List<Client> getAllClientsByUserId(Long userId ) {
         return clientRepository.findAllByUser_Id(userId);
     }
 
@@ -35,12 +36,9 @@ public class ClientService {
     }
 
     public Client addClient(AddClientRequest newClient, Long userId) {
-        Date today = new Date();
         Client client = new Client();
         User user = userService.findUserById(userId);
 
-        client.setCreatedDate(today);
-        client.setUpdatedDate(today);
         client.setFirstName(newClient.getFirstName());
         client.setLastName(newClient.getLastName());
         client.setEmail(newClient.getEmail());
@@ -53,12 +51,12 @@ public class ClientService {
 
     public Client updateClient(ClientModifyRequest client, Long userId) {
         Client clientModel = getClientByIdAndUserId(client.getClientId(), userId);
-        Date today = new Date();
+
         clientModel.setEmail(client.getEmail());
         clientModel.setPhoneNo(clientModel.getPhoneNo());
         clientModel.setFirstName(client.getFirstName());
         clientModel.setLastName(clientModel.getLastName());
-        clientModel.setUpdatedDate(today);
+
         return clientRepository.save(clientModel);
     }
 
@@ -93,4 +91,9 @@ public class ClientService {
         Client clientToDelete = getClientByIdAndUserId(client.getClientId(), id);
         clientRepository.delete(clientToDelete);
     }
+
+//    public Page<Client> getAllClientsByUserIdSorted(Long userId, Pageable pageable) {
+//
+//        return clientRepository.findAllByUser_Id(userId,pageable);
+//    }
 }

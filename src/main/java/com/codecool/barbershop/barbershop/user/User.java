@@ -1,4 +1,6 @@
 package com.codecool.barbershop.barbershop.user;
+
+import com.codecool.barbershop.barbershop.audit.AuditModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -14,10 +16,10 @@ import javax.validation.constraints.NotNull;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
-public class User {
+public class User extends AuditModel  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Setter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @Column(nullable = false)
@@ -41,4 +43,5 @@ public class User {
 
     private String providerId;
 
-   }
+
+}
