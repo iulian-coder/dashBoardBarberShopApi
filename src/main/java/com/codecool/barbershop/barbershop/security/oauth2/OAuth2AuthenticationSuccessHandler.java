@@ -3,7 +3,9 @@ package com.codecool.barbershop.barbershop.security.oauth2;
 
 import com.codecool.barbershop.barbershop.exception.BadRequestException;
 import com.codecool.barbershop.barbershop.security.JwtTokenService;
+import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtTokenService jwtTokenServices;
 
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+
+    /*
+        After successfully authenticating with the OAuth2 Provider,
+        it will be generating an auth token for the user
+        and sending the token to the reactUrlRedirect mentioned.
+        Not using cookies because they won't work well in mobile clients
+    */
+    @Value("${REACT_APP_URL_REDIRECT:Default}")
+    private final String reactUrlRedirect = null;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -50,7 +61,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String token = jwtTokenServices.createToken(authentication);
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        String userId = Long.toString(userPrincipal.getId());
+
+        String token = jwtTokenServices.createToken(userId);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)
@@ -64,11 +78,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 
     private boolean isAuthorizedRedirectUri(String uri) {
-//        TODO Refactor to env the redirect uri
         URI clientRedirectUri = URI.create(uri);
-        String reactUrlRedirect = System.getProperty("REACT_APP_URL_REDIRECT");
         List<String> authorizedRedirectUris = new ArrayList<>(List.of(reactUrlRedirect));
-        System.out.println(reactUrlRedirect);
         return authorizedRedirectUris
                 .stream()
                 .anyMatch(authorizedRedirectUri -> {

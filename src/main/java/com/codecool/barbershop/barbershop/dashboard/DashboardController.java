@@ -1,10 +1,8 @@
 package com.codecool.barbershop.barbershop.dashboard;
 
-import com.codecool.barbershop.barbershop.security.CurrentUser;
+import com.codecool.barbershop.barbershop.user.CurrentUser;
 import com.codecool.barbershop.barbershop.user.UserPrincipal;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

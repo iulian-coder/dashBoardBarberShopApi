@@ -17,11 +17,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public User getUserById(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new BadRequestException("No user id" + id));
-    }
-
-    public UserDetails loadUserById(Long id) {
+    public UserDetails loadUserDetailsById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new RecordNotFoundException("User id " + id)
         );
@@ -41,10 +37,16 @@ public class UserService implements UserDetailsService {
 
 
     public User saveUser(User user) {
+//        TODO exception and move the logic here / exception
+        return userRepository.save(user);
+    }
+
+    public User updateUser(User user){
         return userRepository.save(user);
     }
 
     public User findUserById(Long userId) {
+
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RecordNotFoundException("User id" + userId));
     }

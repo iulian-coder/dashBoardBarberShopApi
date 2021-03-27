@@ -3,7 +3,9 @@ package com.codecool.barbershop.barbershop.client;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+import com.codecool.barbershop.barbershop.audit.AuditModel;
 import com.codecool.barbershop.barbershop.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -17,10 +19,11 @@ import java.util.Date;
 @Getter
 @Entity
 @Table(name = "clients")
-public class Client {
+public class Client extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private long clientId;
 
     @NotNull
@@ -35,16 +38,10 @@ public class Client {
     @NotNull
     private String phoneNo;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false, updatable = false)
-    private Date createdDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedDate;
-
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
 }

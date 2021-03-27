@@ -4,9 +4,10 @@ import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -16,21 +17,24 @@ import java.util.Date;
 
 @Service
 @Slf4j
+@AllArgsConstructor
+@NoArgsConstructor
 public class JwtTokenService {
 
-    private final String tokenSecret = System.getProperty("TOKEN_SECRET");
-    private final long tokenExpire = 36000000;
+    @Value("${TOKEN_SECRET:Default}")
+    private String tokenSecret;
+
 
     private SecretKey getSecretKey() {
-        return Keys.hmacShaKeyFor(tokenSecret.getBytes(StandardCharsets.UTF_8));
+        return
+                Keys.hmacShaKeyFor(tokenSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String userId = Long.toString(userPrincipal.getId());
+    public String createToken(String userId) {
+        long tokenExpirationTime = 18000000; // 300 minutes
 
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + tokenExpire);
+        Date expiryDate = new Date(now.getTime() + tokenExpirationTime);
 
         return Jwts.builder()
                 .setSubject(userId)
@@ -38,6 +42,12 @@ public class JwtTokenService {
                 .setExpiration(expiryDate)
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    //    TODO refresh-token
+    public String createRefreshToken(String userId) {
+//       7 day
+        return null;
     }
 
     public Long getUserIdFromToken(String token) {

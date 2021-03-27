@@ -1,5 +1,6 @@
 package com.codecool.barbershop.barbershop.booking;
 
+import com.codecool.barbershop.barbershop.audit.AuditModel;
 import com.codecool.barbershop.barbershop.client.Client;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -15,8 +16,7 @@ import java.util.Date;
 @Table(name = "bookings")
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class Booking {
+public class Booking extends AuditModel {
 
     @Id
     @GeneratedValue
@@ -26,14 +26,9 @@ public class Booking {
     private String bookingNotes;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false, updatable = false)
-    private Date createdDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
     private Date bookingDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedDate;
 
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus = BookingStatus.UPCOMING;
@@ -42,6 +37,6 @@ public class Booking {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnoreProperties(value={"hibernateLazyInitializer", "handler", "fieldHandler"})
+    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "fieldHandler"})
     private Client client;
 }

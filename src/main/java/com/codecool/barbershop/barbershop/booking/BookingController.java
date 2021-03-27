@@ -2,7 +2,7 @@ package com.codecool.barbershop.barbershop.booking;
 
 import com.codecool.barbershop.barbershop.booking.payload.NewBookingRequest;
 import com.codecool.barbershop.barbershop.booking.payload.ChangeBookingStatusRequest;
-import com.codecool.barbershop.barbershop.security.CurrentUser;
+import com.codecool.barbershop.barbershop.user.CurrentUser;
 import com.codecool.barbershop.barbershop.sms.SmsService;
 import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import lombok.AllArgsConstructor;

@@ -21,3 +21,8 @@ public abstract class OAuth2UserInfo {
 
     public abstract String getImageUrl();
 }
+/*
+Every OAuth2 provider returns a different JSON response when we fetch
+the authenticated user’s details. Spring security
+parses the response in the form of a generic map of key-value pairs.
+ */

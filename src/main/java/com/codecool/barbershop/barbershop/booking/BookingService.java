@@ -5,6 +5,7 @@ import com.codecool.barbershop.barbershop.booking.payload.ChangeBookingStatusReq
 import com.codecool.barbershop.barbershop.client.Client;
 import com.codecool.barbershop.barbershop.client.ClientService;
 import com.codecool.barbershop.barbershop.client.payload.ClientProfileRequest;
+import com.codecool.barbershop.barbershop.exception.RecordNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -27,16 +28,13 @@ public class BookingService {
         return bookingRepository.findAllByClient_User_Id(userId);
     }
 
-    public Booking saveNewBooking(NewBookingRequest newBookingRequest, Long userId)  {
+    public Booking saveNewBooking(NewBookingRequest newBookingRequest, Long userId) {
 
 //        Preparing the data
-        Date today = new Date();
         Booking newBooking = new Booking();
         Client client = clientService.getClientByIdAndUserId(newBookingRequest.getClientId(), userId);
 
 //        Set the data & Save
-        newBooking.setCreatedDate(today);
-        newBooking.setUpdatedDate(today);
         newBooking.setBookingDate(newBookingRequest.getBookingDate());
         newBooking.setClient(client);
         newBooking.setBookingNotes(newBookingRequest.getBookingNotes());
@@ -45,22 +43,17 @@ public class BookingService {
     }
 
     public Booking updateStatusBooking(ChangeBookingStatusRequest bookingRequest) {
-        Optional<Booking> booking = bookingRepository.findById(bookingRequest.getId());
-        if (booking.isEmpty()) return null;
-        else {
-            Date today = new Date();
-            booking.get().setUpdatedDate(today);
-            booking.get().setBookingStatus(BookingStatus.valueOf(bookingRequest.getStatus().toUpperCase(Locale.ROOT)));
-            return bookingRepository.save(booking.get());
-        }
+        Booking booking = bookingRepository.findById(bookingRequest.getId()).orElseThrow(() -> new RecordNotFoundException("Booking not found " + bookingRequest.getId()));
+        booking.setBookingStatus(BookingStatus.valueOf(bookingRequest.getStatus().toUpperCase(Locale.ROOT)));
+        return bookingRepository.save(booking);
     }
 
-    public List<Booking> getAllBookingsByClientId(Long clientId, Sort sort ) {
+    public List<Booking> getAllBookingsByClientId(Long clientId, Sort sort) {
         return bookingRepository.findAllByClient_ClientId(clientId, sort);
     }
 
     public int countBookingsByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus bookingStatus, Long userId) {
-        return bookingRepository.countBookingsByBookingDateBetweenAndBookingStatusAndClient_User_Id(start, end, bookingStatus,userId);
+        return bookingRepository.countBookingsByBookingDateBetweenAndBookingStatusAndClient_User_Id(start, end, bookingStatus, userId);
     }
 
     public List<Booking> findAllByBookingDateBetweenAndBookingStatus(Date start, Date end, BookingStatus bookingStatus, Sort sort, Long userId) {
@@ -68,7 +61,7 @@ public class BookingService {
 
     }
 
-    public ClientProfileRequest getClientDataAndBookings(long clientId, Long userId)  {
+    public ClientProfileRequest getClientDataAndBookings(long clientId, Long userId) {
         Client client = clientService.getClientByIdAndUserId(clientId, userId);
 
         ClientProfileRequest clientProfileRequest = new ClientProfileRequest();
@@ -84,6 +77,4 @@ public class BookingService {
 
         return clientProfileRequest;
     }
-
-
 }
