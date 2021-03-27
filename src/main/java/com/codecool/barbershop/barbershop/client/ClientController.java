@@ -7,15 +7,11 @@ import com.codecool.barbershop.barbershop.user.CurrentUser;
 import com.codecool.barbershop.barbershop.user.UserPrincipal;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/clients")
@@ -27,16 +23,10 @@ public class ClientController {
 
 
     @GetMapping
-    public List<Client> getAllClients(@RequestParam(defaultValue = "0") int page,
+    public Page<Client> getAllClients(@RequestParam(defaultValue = "0") int page,
                                       @RequestParam(defaultValue = "10") int size, @CurrentUser UserPrincipal userPrincipal) {
-
         Long userId = userPrincipal.getId();
-        //        TODO Sort option input from User
-//        Sort sort= Sort.by("createdDate");
-//        Pageable pageable = PageRequest.of(page, size, sort);
-//       Page<Client> clientService.getAllClientsByUserIdSorted(userId, pageable);
-
-        return clientService.getAllClientsByUserId(userId);
+        return clientService.getAllClientsByUserIdPageable(userId,page,size);
     }
 
 
@@ -66,7 +56,5 @@ public class ClientController {
     public void deleteClient(@RequestBody ClientModifyRequest client, @CurrentUser UserPrincipal userPrincipal) {
         clientService.deleteClient(client, userPrincipal.getId());
     }
-
-
 
 }

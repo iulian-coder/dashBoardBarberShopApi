@@ -28,10 +28,6 @@ public class ClientService {
     private final UserService userService;
 
 
-    public List<Client> getAllClientsByUserId(Long userId) {
-        return clientRepository.findAllByUser_Id(userId);
-    }
-
     public Client getClientByIdAndUserId(long clientId, Long userId) {
         Optional<Client> clientModel = clientRepository.findByClientIdAndUser_Id(clientId, userId);
 
@@ -64,7 +60,7 @@ public class ClientService {
 
 
     public List<ClientSearchResponse> searchClientWithAutocomplete(Long userId) {
-        List<Client> allClients = getAllClientsByUserId(userId);
+        List<Client> allClients = clientRepository.findAllByUser_Id(userId);
         return allClients.stream().map(item -> new ClientSearchResponse(item.getClientId(),
                 item.getFirstName(), item.getLastName(), item.getPhoneNo(),
                 item.getFirstName() + " " + item.getLastName() + " | Phone: +" + item.getPhoneNo()))
@@ -86,8 +82,8 @@ public class ClientService {
         clientRepository.delete(clientToDelete);
     }
 
-//    public Page<Client> getAllClientsByUserIdSorted(Long userId, Pageable pageable) {
-//
-//        return clientRepository.findAllByUser_Id(userId,pageable);
-//    }
+    public Page<Client> getAllClientsByUserIdPageable(Long userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return clientRepository.findAllByUser_Id(userId, pageable);
+    }
 }
