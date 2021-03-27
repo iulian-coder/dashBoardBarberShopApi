@@ -37,6 +37,11 @@ public class UserService implements UserDetailsService {
 
 
     public User saveUser(User user) {
+//        TODO exception and move the logic here / exception
+        return userRepository.save(user);
+    }
+
+    public User updateUser(User user){
         return userRepository.save(user);
     }
 

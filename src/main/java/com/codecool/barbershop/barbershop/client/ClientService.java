@@ -7,6 +7,7 @@ import com.codecool.barbershop.barbershop.exception.RecordNotFoundException;
 import com.codecool.barbershop.barbershop.user.User;
 import com.codecool.barbershop.barbershop.user.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,16 +17,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ClientService {
 
     private final ClientRepository clientRepository;
     private final UserService userService;
 
 
-    public List<Client> getAllClientsByUserId(Long userId ) {
+    public List<Client> getAllClientsByUserId(Long userId) {
         return clientRepository.findAllByUser_Id(userId);
     }
 
@@ -49,32 +52,23 @@ public class ClientService {
     }
 
 
-    public Client updateClient(ClientModifyRequest client, Long userId) {
-        Client clientModel = getClientByIdAndUserId(client.getClientId(), userId);
-
-        clientModel.setEmail(client.getEmail());
-        clientModel.setPhoneNo(clientModel.getPhoneNo());
-        clientModel.setFirstName(client.getFirstName());
-        clientModel.setLastName(clientModel.getLastName());
-
+    public Client updateClient(ClientModifyRequest clientModifyRequest, Long userId) {
+        Client clientModel = getClientByIdAndUserId(clientModifyRequest.getClientId(), userId);
+        log.info("Update client " + clientModifyRequest + " userId " + userId);
+        clientModel.setEmail(clientModifyRequest.getEmail());
+        clientModel.setPhoneNo(clientModifyRequest.getPhoneNo());
+        clientModel.setFirstName(clientModifyRequest.getFirstName());
+        clientModel.setLastName(clientModifyRequest.getLastName());
         return clientRepository.save(clientModel);
     }
 
 
     public List<ClientSearchResponse> searchClientWithAutocomplete(Long userId) {
-        List<ClientSearchResponse> clientSearchResponseList = new ArrayList<>();
         List<Client> allClients = getAllClientsByUserId(userId);
-
-        for (Client client : allClients) {
-            ClientSearchResponse autocompleteReq = new ClientSearchResponse();
-            autocompleteReq.setId(client.getClientId());
-            autocompleteReq.setFirstName(client.getFirstName());
-            autocompleteReq.setLastName(client.getLastName());
-            autocompleteReq.setPhoneNo(client.getPhoneNo());
-            autocompleteReq.setNameAndPhone(client.getFirstName() + " " + client.getLastName() + " | Phone: " + client.getPhoneNo());
-            clientSearchResponseList.add(autocompleteReq);
-        }
-        return clientSearchResponseList;
+        return allClients.stream().map(item -> new ClientSearchResponse(item.getClientId(),
+                item.getFirstName(), item.getLastName(), item.getPhoneNo(),
+                item.getFirstName() + " " + item.getLastName() + " | Phone: +" + item.getPhoneNo()))
+                .collect(Collectors.toList());
     }
 
 

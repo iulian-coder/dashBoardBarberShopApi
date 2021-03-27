@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import com.codecool.barbershop.barbershop.audit.AuditModel;
 import com.codecool.barbershop.barbershop.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -40,6 +41,7 @@ public class Client extends AuditModel {
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
 }

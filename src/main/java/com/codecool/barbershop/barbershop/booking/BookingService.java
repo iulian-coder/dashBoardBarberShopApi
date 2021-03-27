@@ -31,13 +31,10 @@ public class BookingService {
     public Booking saveNewBooking(NewBookingRequest newBookingRequest, Long userId) {
 
 //        Preparing the data
-        Date today = new Date();
         Booking newBooking = new Booking();
         Client client = clientService.getClientByIdAndUserId(newBookingRequest.getClientId(), userId);
 
 //        Set the data & Save
-        newBooking.setCreatedDate(today);
-        newBooking.setUpdatedDate(today);
         newBooking.setBookingDate(newBookingRequest.getBookingDate());
         newBooking.setClient(client);
         newBooking.setBookingNotes(newBookingRequest.getBookingNotes());
@@ -47,8 +44,6 @@ public class BookingService {
 
     public Booking updateStatusBooking(ChangeBookingStatusRequest bookingRequest) {
         Booking booking = bookingRepository.findById(bookingRequest.getId()).orElseThrow(() -> new RecordNotFoundException("Booking not found " + bookingRequest.getId()));
-        Date today = new Date();
-        booking.setUpdatedDate(today);
         booking.setBookingStatus(BookingStatus.valueOf(bookingRequest.getStatus().toUpperCase(Locale.ROOT)));
         return bookingRepository.save(booking);
     }
@@ -82,6 +77,4 @@ public class BookingService {
 
         return clientProfileRequest;
     }
-
-
 }

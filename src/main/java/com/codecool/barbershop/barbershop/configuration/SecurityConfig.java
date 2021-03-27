@@ -74,6 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .headers().frameOptions().disable().and()
                 .cors()
                 .and()
                 .sessionManagement()
@@ -87,6 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                     .antMatchers("/","/error").permitAll()
+                    .antMatchers("/h2-console/**").permitAll()
                     .antMatchers("/auth/**", "/oauth2/**").permitAll()
                     .anyRequest().authenticated()
                 .and()

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,11 +47,13 @@ public class ClientController {
 
 
     @PostMapping
-    public Client addClient(@Valid @RequestBody AddClientRequest newClient, @CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<?> addClient(@Valid @RequestBody AddClientRequest newClient, @CurrentUser UserPrincipal userPrincipal) {
         if (clientService.existsByPhoneNoAndUserId(newClient.getPhoneNo(), userPrincipal.getId())) {
             throw new BadRequestException("Phone number already in use.");
         }
-        return clientService.addClient(newClient, userPrincipal.getId());
+        Client client = clientService.addClient(newClient, userPrincipal.getId());
+        return new ResponseEntity<>(client, HttpStatus.CREATED);
+
     }
 
     @PutMapping
@@ -64,9 +67,6 @@ public class ClientController {
         clientService.deleteClient(client, userPrincipal.getId());
     }
 
-    @GetMapping("search-client")
-    public List<ClientSearchResponse> searchClientWithAutocomplete(@CurrentUser UserPrincipal userPrincipal) {
-        return clientService.searchClientWithAutocomplete(userPrincipal.getId());
-    }
+
 
 }

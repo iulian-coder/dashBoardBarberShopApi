@@ -34,6 +34,7 @@ class UserServiceTest {
 
     @Test
     void saveUser() {
+//        TODO tests with fail scenery
         User user = new User(
                 1L,
                 "jon",
