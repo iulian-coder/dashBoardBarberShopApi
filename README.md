@@ -2,10 +2,6 @@
 
 DashboardBarbershop is a management app for keeping track of customers. The user can register the clients, make reservations, send SMS notifications and view their reservations history.
 
-## Demo
-
-https://dashboardbarbershop.herokuapp.com
-
 
 ## Technologies
 
